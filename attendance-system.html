@@ -331,7 +331,35 @@
         <div class="input-line"></div>
       </div>
       <button class="primary" onclick="loadTeacherAttendance()">Show Attendance</button>
+      <button class="secondary" onclick="downloadAttendanceCSV()">⬇ Download CSV</button>
       <div id="teacherAttendanceList" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="card">
+      <h3>📅 Monthly Report</h3>
+      <div class="input-box">
+        <input type="month" id="reportMonth" placeholder=" " />
+        <label>Month</label>
+        <div class="input-line"></div>
+      </div>
+      <div class="input-box select-box">
+        <select id="reportClass">
+          <option value="">-- All Classes --</option>
+          <option value="CSE-A">CSE-A</option>
+          <option value="CSE-B">CSE-B</option>
+          <option value="IT-A">IT-A</option>
+          <option value="AIDS">AIDS</option>
+          <option value="MECH">MECH</option>
+          <option value="ROBOTICS">ROBOTICS</option>
+          <option value="EEE">EEE</option>
+          <option value="AUTO">AUTO</option>
+          <option value="BIO">BIO</option>
+        </select>
+        <div class="input-line"></div>
+      </div>
+      <div class="scan-hint" style="margin-bottom:10px;">1 = Present, 0 = Absent / Holiday</div>
+      <button class="primary" onclick="downloadMonthlyReport()">⬇ Download Monthly Report (1/0)</button>
+      <div id="monthlyReportStatus" style="margin-top:10px;"></div>
     </div>
   </div>
 
@@ -640,17 +668,22 @@
     }
 
     // ================= TEACHER: View who attended =================
+    let lastLoadedEntries = [];
+    let lastLoadedDateKey = '';
+
     function loadTeacherAttendance() {
       const dateInput = document.getElementById('viewDate').value;
       const classFilter = document.getElementById('viewClass').value;
       const listDiv = document.getElementById('teacherAttendanceList');
       const dateKey = dateInput || getTodayKey();
+      lastLoadedDateKey = dateKey;
 
       listDiv.innerHTML = '<div class="scan-hint">Loading...</div>';
 
       db.ref(`attendance/${dateKey}`).once('value').then((snap) => {
         if (!snap.exists()) {
           listDiv.innerHTML = '<div class="scan-hint">No attendance records for this date.</div>';
+          lastLoadedEntries = [];
           return;
         }
         const data = snap.val();
@@ -660,9 +693,11 @@
         }
         if (entries.length === 0) {
           listDiv.innerHTML = '<div class="scan-hint">No students found for this class on this date.</div>';
+          lastLoadedEntries = [];
           return;
         }
         entries.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        lastLoadedEntries = entries;
         let html = `<div class="scan-hint" style="margin-bottom:8px;">${entries.length} student(s) marked present</div>`;
         entries.forEach((entry) => {
           html += `<div class="history-item">
@@ -673,6 +708,104 @@
         listDiv.innerHTML = html;
       }).catch((err) => {
         listDiv.innerHTML = '<div class="error-msg">Error loading attendance</div>';
+        console.error(err);
+      });
+    }
+
+    function downloadAttendanceCSV() {
+      if (!lastLoadedEntries || lastLoadedEntries.length === 0) {
+        alert('Show attendance first, then download.');
+        return;
+      }
+      let csv = 'Name,Roll Number,Class,Subject,Time\n';
+      lastLoadedEntries.forEach((entry) => {
+        const time = new Date(entry.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+        csv += `"${entry.name}","${entry.roll}","${entry.class}","${entry.subject}","${time}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `attendance_${lastLoadedDateKey || getTodayKey()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ================= TEACHER: Monthly Report (1/0 grid) =================
+    function downloadMonthlyReport() {
+      const monthInput = document.getElementById('reportMonth').value; // format: "2026-06"
+      const classFilter = document.getElementById('reportClass').value;
+      const statusDiv = document.getElementById('monthlyReportStatus');
+
+      if (!monthInput) { alert('Month select pannunga'); return; }
+
+      const [year, month] = monthInput.split('-').map(Number);
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      statusDiv.innerHTML = '<div class="scan-hint">Loading data, please wait...</div>';
+
+      // Build all date keys for the month, e.g. 2026-06-01, 2026-06-02 ...
+      const dateKeys = [];
+      for (let d = 1; d <= daysInMonth; d++) {
+        dateKeys.push(`${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+      }
+
+      // Fetch attendance for every day in parallel
+      const fetches = dateKeys.map(dateKey =>
+        db.ref(`attendance/${dateKey}`).once('value').then(snap => ({ dateKey, data: snap.exists() ? snap.val() : null }))
+      );
+
+      Promise.all(fetches).then((results) => {
+        // studentMap: { roll: { name, days: { 1: true, 2: true, ... } } }
+        const studentMap = {};
+
+        results.forEach(({ dateKey, data }) => {
+          if (!data) return;
+          const dayNum = parseInt(dateKey.split('-')[2], 10);
+          Object.values(data).forEach((entry) => {
+            if (classFilter && entry.class !== classFilter) return;
+            if (!studentMap[entry.roll]) {
+              studentMap[entry.roll] = { name: entry.name, days: {} };
+            }
+            studentMap[entry.roll].days[dayNum] = true;
+          });
+        });
+
+        const rolls = Object.keys(studentMap).sort();
+        if (rolls.length === 0) {
+          statusDiv.innerHTML = '<div class="scan-hint">No attendance data found for this month.</div>';
+          return;
+        }
+
+        // Build CSV header: Roll Number, Name, 1, 2, 3 ... daysInMonth
+        let header = ['Roll Number', 'Name'];
+        for (let d = 1; d <= daysInMonth; d++) header.push(String(d));
+        let csv = header.join(',') + '\n';
+
+        rolls.forEach((roll) => {
+          const student = studentMap[roll];
+          let row = [`"${roll}"`, `"${student.name}"`];
+          for (let d = 1; d <= daysInMonth; d++) {
+            row.push(student.days[d] ? '1' : '0');
+          }
+          csv += row.join(',') + '\n';
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `monthly_report_${monthInput}${classFilter ? '_' + classFilter : ''}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        statusDiv.innerHTML = `<div class="success-msg">Report downloaded — ${rolls.length} student(s)</div>`;
+      }).catch((err) => {
+        statusDiv.innerHTML = '<div class="error-msg">Error generating report</div>';
         console.error(err);
       });
     }
