@@ -111,6 +111,17 @@
   }
   .input-box input:focus ~ label,
   .input-box input:not(:placeholder-shown) ~ label { top:-12px; font-size:0.75em; color:#00f7ff; }
+
+  /* select dropdowns: label always stays fixed above, doesn't overlap selected value */
+  .input-box.select-box label {
+    position:static;
+    display:block;
+    transform:none;
+    font-size:0.75em;
+    color:#00f7ff;
+    margin-bottom:4px;
+  }
+  .input-box.select-box select { margin-top:2px; }
   .input-box input, .input-box select {
     width:100%; height:46px; background:transparent; border:none; outline:none;
     font-size:1em; color:#fff; padding:0 5px; border-bottom:2.5px solid #333;
@@ -228,7 +239,7 @@
         <button class="secondary" onclick="toggleManualEntry()">Enter class manually</button>
 
         <div id="manualEntryArea" style="display:none; margin-top:14px;">
-          <div class="input-box">
+          <div class="input-box select-box">
             <select id="manualClass">
               <option value="">-- Select Class --</option>
               <option value="CSE-A">CSE-A</option>
@@ -288,7 +299,7 @@
   <div id="teacherTab" style="display:none;">
     <div class="card">
       <h2>Generate Session QR</h2>
-      <div class="input-box">
+      <div class="input-box select-box">
         <select id="teacherClass">
           <option value="">-- Select Class --</option>
           <option value="CSE-A">CSE-A</option>
