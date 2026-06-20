@@ -236,26 +236,7 @@
 
       <div id="preScanArea">
         <button class="primary" onclick="startScanner()">📷 Scan QR Code</button>
-        <button class="secondary" onclick="toggleManualEntry()">Enter class manually</button>
-
-        <div id="manualEntryArea" style="display:none; margin-top:14px;">
-          <div class="input-box select-box">
-            <select id="manualClass">
-              <option value="">-- Select Class --</option>
-              <option value="CSE-A">CSE-A</option>
-              <option value="CSE-B">CSE-B</option>
-              <option value="IT-A">IT-A</option>
-            </select>
-            <label>Class</label>
-            <div class="input-line"></div>
-          </div>
-          <div class="input-box">
-            <input type="text" id="manualSubject" placeholder=" " />
-            <label>Subject</label>
-            <div class="input-line"></div>
-          </div>
-          <button class="primary" onclick="confirmManualClass()">Confirm Class</button>
-        </div>
+        <div class="scan-hint" style="margin-top:10px;">If the camera isn't working, inform your teacher — they will mark attendance manually for you.</div>
 
         <div id="qrVideoWrap">
           <video id="qrVideo" playsinline></video>
@@ -305,8 +286,13 @@
           <option value="CSE-A">CSE-A</option>
           <option value="CSE-B">CSE-B</option>
           <option value="IT-A">IT-A</option>
+          <option value="AIDS">AIDS</option>
+          <option value="MECH">MECH</option>
+          <option value="ROBOTICS">ROBOTICS</option>
+          <option value="EEE">EEE</option>
+          <option value="AUTO">AUTO</option>
+          <option value="BIO">BIO</option>
         </select>
-        <label>Class</label>
         <div class="input-line"></div>
       </div>
       <div class="input-box">
@@ -417,24 +403,6 @@
       document.getElementById('classInfoBox').style.display = 'none';
       document.getElementById('preScanArea').style.display = 'block';
       document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('manualEntryArea').style.display = 'none';
-    }
-
-    function toggleManualEntry() {
-      const area = document.getElementById('manualEntryArea');
-      area.style.display = area.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function confirmManualClass() {
-      const cls = document.getElementById('manualClass').value;
-      const sub = document.getElementById('manualSubject').value.trim();
-      if (!cls || !sub) {
-        alert('Class & Subject select pannunga');
-        return;
-      }
-      currentClass = cls;
-      currentSubject = sub;
-      showClassBadgesAndForm();
     }
 
     // ================= QR SCANNER (jsQR) =================
