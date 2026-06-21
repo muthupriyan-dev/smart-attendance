@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Smart Attendance System</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -196,6 +197,60 @@
     font-size:0.75em;
     line-height:1.6;
   }
+  .footer-links {
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:16px;
+  }
+  .footer-links a {
+    color:#00f7ff;
+    text-decoration:none;
+    font-size:1.4em;
+  }
+  .footer-links a:hover {
+    text-decoration:underline;
+  }
+
+  #themeToggle {
+    cursor:pointer;
+    font-size:1.1em;
+    margin-left:6px;
+  }
+
+  /* ================= LIGHT THEME ================= */
+  body.light-theme {
+    background:#f2f5f8;
+    color:#1a1a1a;
+  }
+  body.light-theme .topbar { color:#5a6472; }
+  body.light-theme .brand { color:#1a1a1a; }
+  body.light-theme .clock-row { color:#0098a8; }
+  body.light-theme .tabs { background:#ffffff; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+  body.light-theme .tab-btn { color:#5a6472; }
+  body.light-theme .tab-btn.active { background:#00b3c6; color:#fff; box-shadow:0 0 10px rgba(0,179,198,0.4); }
+  body.light-theme .card { background:#ffffff; box-shadow:0 2px 14px rgba(0,0,0,0.08); }
+  body.light-theme h2, body.light-theme h3 { color:#0a8a99; }
+  body.light-theme .input-box label { color:#5a6472; }
+  body.light-theme .input-box input,
+  body.light-theme .input-box select { color:#1a1a1a; border-bottom-color:#d8dee3; }
+  body.light-theme .input-box input:focus ~ label,
+  body.light-theme .input-box input:not(:placeholder-shown) ~ label { color:#0a8a99; }
+  body.light-theme .input-box.select-box label { color:#0a8a99; }
+  body.light-theme .badge { background:rgba(0,179,198,0.08); border-color:#00b3c6; color:#0a8a99; }
+  body.light-theme button.primary { background:#1a1a1a; color:#fff; }
+  body.light-theme button.primary:hover { background:#00b3c6; color:#fff; }
+  body.light-theme button.secondary { border-color:#d8dee3; color:#5a6472; }
+  body.light-theme button.secondary:hover { border-color:#00b3c6; color:#0a8a99; }
+  body.light-theme .closed-msg { color:#c0532f; }
+  body.light-theme .scan-hint { color:#7a8694; }
+  body.light-theme .history-item { border-bottom-color:#eef1f4; }
+  body.light-theme .history-date { color:#1a1a1a; }
+  body.light-theme .history-sub { color:#7a8694; }
+  body.light-theme footer { color:#9aa5b1; }
+  body.light-theme .footer-links a { color:#0a8a99; }
+  body.light-theme video { border-color:#00b3c6; }
+  body.light-theme select option { background:#fff; color:#1a1a1a; }
 </style>
 </head>
 <body>
@@ -205,6 +260,7 @@
     <div class="status-row">
       <span class="status-dot" id="statusDot"></span>
       <span id="statusText">Connecting...</span>
+      <span id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</span>
     </div>
   </div>
   <div class="clock-row" id="clockRow">--</div>
@@ -366,6 +422,20 @@
   <footer>
     Smart Attendance System &copy; 2026<br>
     Built by Muthupriyan &middot; muthupriyan-dev
+    <div class="footer-links">
+      <a href="https://github.com/muthupriyan-dev" target="_blank" title="GitHub">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 4.93 3.2 9.11 7.64 10.59.56.1.76-.24.76-.54 0-.27-.01-1.16-.02-2.11-3.11.68-3.77-1.32-3.77-1.32-.51-1.29-1.24-1.63-1.24-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.24.92.1-.72.39-1.21.71-1.49-2.48-.28-5.09-1.24-5.09-5.51 0-1.22.43-2.21 1.15-2.99-.11-.28-.5-1.42.11-2.96 0 0 .94-.3 3.08 1.14a10.7 10.7 0 0 1 5.6 0c2.14-1.44 3.08-1.14 3.08-1.14.61 1.54.22 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.28-2.62 5.23-5.11 5.5.4.35.76 1.04.76 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.2.65.77.54A11.04 11.04 0 0 0 23.02 11.5C23.02 5.24 18.27.5 12 .5Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/itz.muthuu" target="_blank" title="Instagram">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07Zm0-2.16C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56a5.9 5.9 0 0 0-2.13 1.39A5.9 5.9 0 0 0 .62 4.15c-.3.76-.5 1.63-.56 2.91C0 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.3.78.69 1.44 1.39 2.13a5.9 5.9 0 0 0 2.13 1.39c.76.3 1.63.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.39 5.9 5.9 0 0 0 1.39-2.13c.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.39-2.13A5.9 5.9 0 0 0 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84Zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4Zm6.41-10.85a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
+      </a>
+      <a href="mailto:smuthupriyan020108@gmail.com" title="Email">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor"><path d="M2 4h20c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H2c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm0 2v.01L12 13 22 6.01V6H2Zm0 12h20V8.24l-9.4 6.46a1 1 0 0 1-1.2 0L2 8.24V18Z"/></svg>
+      </a>
+    </div>
   </footer>
 
   <!-- Firebase -->
@@ -391,14 +461,14 @@
     const db = firebase.database();
 
     // ---------------- Attendance window (edit hours here) ----------------
-    const WINDOW_START_HOUR = 7;   // 7 AM
-    const WINDOW_END_HOUR   = 19;  // 7 PM
-    document.getElementById('windowText').textContent =
-      `${WINDOW_START_HOUR}:00 AM - ${WINDOW_END_HOUR-12}:00 PM`;
+    const WINDOW_START_MIN = 7 * 60;        // 7:00 AM
+    const WINDOW_END_MIN   = 16 * 60 + 30;  // 4:30 PM
+    document.getElementById('windowText').textContent = `7:00 AM - 4:30 PM`;
 
     function isWithinWindow() {
-      const h = new Date().getHours();
-      return h >= WINDOW_START_HOUR && h < WINDOW_END_HOUR;
+      const now = new Date();
+      const mins = now.getHours() * 60 + now.getMinutes();
+      return mins >= WINDOW_START_MIN && mins < WINDOW_END_MIN;
     }
 
     function checkWindowLock() {
@@ -435,6 +505,27 @@
     // Change this PIN to whatever you want - only teachers should know it
     const TEACHER_PIN = "2026";
     let teacherUnlocked = false;
+
+    // ---------------- Theme toggle (dark/light) ----------------
+    function applyTheme(theme) {
+      const toggleIcon = document.getElementById('themeToggle');
+      if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        toggleIcon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('light-theme');
+        toggleIcon.textContent = '🌙';
+      }
+      localStorage.setItem('app_theme', theme);
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains('light-theme');
+      applyTheme(isLight ? 'dark' : 'light');
+    }
+
+    // Apply saved theme on load
+    applyTheme(localStorage.getItem('app_theme') || 'dark');
 
     function switchTab(tab) {
       if (tab === 'teacher' && !teacherUnlocked) {
