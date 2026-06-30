@@ -1,301 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Smart Attendance System</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Attendance · Glass UI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
 
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
 
-  body {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 35%, #00c9a7 70%, #ff9a3c 100%);
-    background-attachment: fixed;
-    color:#fff;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:20px 16px 60px;
-  }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 30%, #f5c6a0 60%, #e8a87c 85%, #d4a5a5 100%);
+      background-attachment: fixed;
+      padding: 20px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  /* ---------- Header ---------- */
-  .topbar {
-    width:100%;
-    max-width:420px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
-    font-size:0.78em;
-    color:#fff;
-  }
-  .brand {
-    font-size:1.2em;
-    font-weight:800;
-    color:#fff;
-    letter-spacing:0.5px;
-    text-shadow:0 2px 6px rgba(0,0,0,0.25);
-  }
-  .brand span { background:linear-gradient(90deg,#ffe259,#ffa751); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .status-row { display:flex; align-items:center; gap:6px; }
-  .status-dot {
-    width:9px; height:9px; border-radius:50%;
-    background:#ff4757;
-    box-shadow:0 0 6px #ff4757;
-    transition:.4s;
-  }
-  .status-dot.online {
-    background:#2ed573;
-    box-shadow:0 0 8px #2ed573;
-  }
-  .clock-row { width:100%; max-width:420px; text-align:center; margin-bottom:18px; color:#fff; font-weight:600; font-size:0.85em; letter-spacing:0.5px; text-shadow:0 1px 4px rgba(0,0,0,0.2); }
+    /* Glassmorphism base */
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
 
-  /* ---------- Tabs ---------- */
-  .tabs {
-    display:flex;
-    width:100%;
-    max-width:420px;
-    background:rgba(255,255,255,0.18);
-    backdrop-filter:blur(8px);
-    border-radius:14px;
-    padding:5px;
-    margin-bottom:20px;
-    border:1px solid rgba(255,255,255,0.25);
-  }
-  .tab-btn {
-    flex:1;
-    padding:10px 0;
-    text-align:center;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:0.9em;
-    font-weight:700;
-    color:#fff;
-    transition:.3s;
-  }
-  .tab-btn.active {
-    background:linear-gradient(90deg,#ff6a88,#ff9a3c);
-    color:#fff;
-    box-shadow:0 4px 14px rgba(255,106,136,0.5);
-  }
+    /* Top Bar */
+    .topbar {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 22px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
 
-  .card {
-    width:100%;
-    max-width:420px;
-    background:rgba(255,255,255,0.97);
-    color:#2b2d42;
-    border-radius:20px;
-    padding:26px 22px;
-    margin-bottom:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.18);
-  }
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #2d2d44, #5a3d5c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .brand span {
+      background: linear-gradient(135deg, #c0392b, #e67e22);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
 
-  h2 { font-size:1.4em; margin-bottom:14px; text-align:center; background:linear-gradient(90deg,#6a11cb,#2575fc); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:800; }
-  h3 { font-size:1.05em; margin-bottom:10px; color:#ff6a88; font-weight:700; }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #2d2d44;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e74c3c;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+      transition: 0.3s;
+    }
+    .status-dot.online {
+      background: #27ae60;
+      box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.3);
+    }
+    #themeToggle {
+      cursor: pointer;
+      font-size: 1.1rem;
+      opacity: 0.7;
+      transition: 0.3s;
+      background: none;
+      border: none;
+    }
+    #themeToggle:hover { opacity: 1; }
 
-  .closed-msg {
-    text-align:center;
-    padding:30px 10px;
-    color:#ff6a3c;
-    font-size:0.95em;
-    line-height:1.6;
-    font-weight:600;
-  }
+    /* Clock */
+    .clock-row {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.82rem;
+      padding: 8px 16px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      margin-bottom: 20px;
+      color: #2d2d44;
+      letter-spacing: 0.3px;
+    }
 
-  /* ---------- Inputs ---------- */
-  .input-box { position:relative; width:100%; margin:24px 0; }
-  .input-box .input-line {
-    position:absolute; bottom:-2px; left:0; width:100%; height:2.5px;
-    background:#e0e0f0; transition:.4s;
-  }
-  .input-box input:focus ~ .input-line,
-  .input-box select:focus ~ .input-line { background:linear-gradient(90deg,#6a11cb,#2575fc); box-shadow:0 0 8px rgba(106,17,203,0.5); }
-  .input-box label {
-    position:absolute; top:50%; left:5px; transform:translateY(-50%);
-    font-size:0.95em; color:#8a8aa3; pointer-events:none; transition:.3s;
-  }
-  .input-box input:focus ~ label,
-  .input-box input:not(:placeholder-shown) ~ label { top:-12px; font-size:0.75em; color:#6a11cb; font-weight:600; }
+    /* Tabs */
+    .tabs {
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 50px;
+      padding: 6px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      text-align: center;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #2d2d44;
+      transition: all 0.3s ease;
+      background: transparent;
+      border: none;
+    }
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
 
-  /* select dropdowns: label always stays fixed above, doesn't overlap selected value */
-  .input-box.select-box label {
-    position:static;
-    display:block;
-    transform:none;
-    font-size:0.75em;
-    color:#6a11cb;
-    font-weight:600;
-    margin-bottom:4px;
-  }
-  .input-box.select-box select { margin-top:2px; }
-  .input-box input, .input-box select {
-    width:100%; height:46px; background:transparent; border:none; outline:none;
-    font-size:1em; color:#2b2d42; padding:0 5px; border-bottom:2.5px solid #e0e0f0;
-  }
-  #rollNumber, #histRoll { text-transform:uppercase; }
+    /* Cards */
+    .card {
+      width: 100%;
+      max-width: 500px;
+      padding: 28px 24px;
+      border-radius: 28px;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+      color: #1a1a2e;
+      transition: all 0.25s ease;
+    }
+    .card:hover {
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+    }
 
-  select option { background:#fff; color:#2b2d42; }
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      background: linear-gradient(135deg, #2d2d5e, #b14a6b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e1e3a;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-  .badge {
-    display:inline-block;
-    background:linear-gradient(90deg,rgba(106,17,203,0.12),rgba(37,117,252,0.12));
-    border:1px solid #6a11cb;
-    color:#6a11cb;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:0.8em;
-    margin:4px 4px 4px 0;
-    font-weight:600;
-  }
+    .closed-msg {
+      text-align: center;
+      padding: 24px 12px;
+      font-weight: 600;
+      color: #2d2d44;
+      background: rgba(255, 215, 215, 0.2);
+      border-radius: 24px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-  button.primary {
-    width:100%; height:46px;
-    background:linear-gradient(90deg,#ff6a88,#ff9a3c);
-    border:none; border-radius:40px;
-    cursor:pointer; font-size:1em; color:#fff; font-weight:700; margin-top:6px;
-    transition:.3s;
-    box-shadow:0 6px 16px rgba(255,106,136,0.35);
-  }
-  button.primary:hover { filter:brightness(1.08); box-shadow:0 8px 20px rgba(255,106,136,0.5); transform:translateY(-1px); }
-  button.primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+    /* Inputs */
+    .input-box {
+      position: relative;
+      width: 100%;
+      margin: 20px 0;
+    }
+    .input-box .input-line {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2.5px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+    .input-box input:focus ~ .input-line,
+    .input-box select:focus ~ .input-line {
+      background: linear-gradient(90deg, #b14a6b, #d68b6b);
+      box-shadow: 0 0 16px rgba(177, 74, 107, 0.15);
+    }
+    .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 6px;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      color: #4a4a6a;
+      pointer-events: none;
+      transition: 0.25s;
+      font-weight: 500;
+    }
+    .input-box input:focus ~ label,
+    .input-box input:not(:placeholder-shown) ~ label {
+      top: -10px;
+      font-size: 0.7rem;
+      color: #a14a6b;
+      font-weight: 700;
+    }
+    .input-box.select-box label {
+      position: static;
+      display: block;
+      transform: none;
+      font-size: 0.75rem;
+      color: #2d2d5e;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .input-box input,
+    .input-box select {
+      width: 100%;
+      height: 48px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      padding: 0 6px;
+      border-bottom: 2.5px solid rgba(0, 0, 0, 0.06);
+      font-weight: 500;
+    }
+    .input-box select {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      height: 50px;
+    }
+    select option {
+      background: rgba(255, 255, 255, 0.95);
+      color: #1a1a2e;
+    }
 
-  button.secondary {
-    width:100%; height:42px; background:transparent; border:1.5px solid #d8d8ec;
-    border-radius:40px; color:#6a6a8a; font-size:0.9em; cursor:pointer; margin-top:10px;
-    transition:.3s; font-weight:600;
-  }
-  button.secondary:hover { border-color:#2575fc; color:#2575fc; }
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: #1e1e3a;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin: 4px 4px 4px 0;
+    }
 
-  .error-msg { color:#ff4757; font-size:.82em; margin-top:8px; min-height:14px; text-align:center; font-weight:600; }
-  .success-msg { color:#06b06b; font-size:.85em; margin-top:8px; min-height:14px; text-align:center; font-weight:600; }
+    /* Buttons */
+    button.primary {
+      width: 100%;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      margin-top: 4px;
+    }
+    button.primary:hover {
+      background: rgba(255, 255, 255, 0.75);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+    button.primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-  .welcome-tag { text-align:center; color:#ff6a88; font-size:0.85em; margin-bottom:8px; font-weight:600; }
+    button.secondary {
+      width: 100%;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 40px;
+      color: #1e1e3a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 10px;
+    }
+    button.secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
 
-  /* ---------- QR scan/video ---------- */
-  #qrVideoWrap { display:none; margin-top:14px; }
-  video { width:100%; border-radius:14px; border:3px solid; border-image:linear-gradient(90deg,#6a11cb,#2575fc,#00c9a7) 1; }
-  #qrCanvasHidden { display:none; }
-  .scan-hint { text-align:center; font-size:0.78em; color:#8a8aa3; margin-top:8px; }
+    .error-msg {
+      color: #c0392b;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-top: 6px;
+      text-align: center;
+    }
+    .success-msg {
+      color: #1e7e4a;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 6px;
+      text-align: center;
+    }
+    .welcome-tag {
+      text-align: center;
+      font-weight: 600;
+      color: #2d2d5e;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 6px 18px;
+      display: inline-block;
+      margin: 0 auto 12px;
+      font-size: 0.9rem;
+    }
 
-  /* spinner */
-  .spinner {
-    width:16px; height:16px; border:2px solid rgba(255,255,255,0.4);
-    border-top-color:#fff; border-radius:50%;
-    display:inline-block; margin-right:8px; vertical-align:middle;
-    animation:spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform:rotate(360deg); } }
+    /* Video / QR */
+    #qrVideoWrap {
+      display: none;
+      margin-top: 16px;
+    }
+    video {
+      width: 100%;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      background: #0a0a1a;
+    }
+    #qrCanvasHidden {
+      display: none;
+    }
+    .scan-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #3a3a5a;
+      opacity: 0.7;
+      margin-top: 8px;
+      font-weight: 500;
+    }
 
-  /* teacher qr display */
-  #teacherQrBox { text-align:center; margin-top:18px; }
-  #qrcodeCanvasHolder { display:inline-block; background:#fff; padding:14px; border-radius:14px; margin-top:10px; box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(0, 0, 0, 0.08);
+      border-top-color: #1a1a2e;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-  /* history list */
-  .history-item {
-    display:flex; justify-content:space-between; padding:10px 0;
-    border-bottom:1px solid #eee; font-size:0.88em;
-  }
-  .history-item:last-child { border-bottom:none; }
-  .history-date { color:#2b2d42; font-weight:600; }
-  .history-sub { color:#8a8aa3; font-size:0.85em; }
+    #teacherQrBox {
+      text-align: center;
+      margin-top: 18px;
+    }
+    #qrcodeCanvasHolder {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      padding: 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin-top: 8px;
+    }
+    #qrcodeCanvasHolder canvas {
+      display: block;
+      margin: 0 auto;
+    }
 
-  footer {
-    margin-top:10px;
-    text-align:center;
-    color:rgba(255,255,255,0.85);
-    font-size:0.75em;
-    line-height:1.6;
-    text-shadow:0 1px 4px rgba(0,0,0,0.2);
-  }
-  .footer-links {
-    margin-top:10px;
-    display:flex;
-    justify-content:center;
-    gap:16px;
-  }
-  .footer-links a {
-    color:#fff;
-    text-decoration:none;
-    font-size:1.4em;
-    transition:.3s;
-  }
-  .footer-links a:hover {
-    color:#ffe259;
-    transform:translateY(-2px);
-    display:inline-block;
-  }
+    /* History */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      font-size: 0.9rem;
+    }
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    .history-date {
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .history-sub {
+      color: #4a4a6a;
+      font-size: 0.8rem;
+    }
 
-  #themeToggle {
-    cursor:pointer;
-    font-size:1.1em;
-    margin-left:6px;
-  }
+    /* Footer */
+    footer {
+      margin-top: 16px;
+      text-align: center;
+      color: #1a1a2e;
+      font-weight: 500;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      padding: 14px 20px;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+    .footer-links {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+    }
+    .footer-links a {
+      color: #2d2d44;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: 0.2s;
+      opacity: 0.6;
+    }
+    .footer-links a:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
 
-  /* ================= LIGHT (PASTEL) THEME ================= */
-  body.light-theme {
-    background: linear-gradient(135deg, #fceabb 0%, #f8b500 25%, #a1ffce 60%, #faffd1 100%);
-    background-attachment: fixed;
-    color:#2b2d42;
-  }
-  body.light-theme .topbar { color:#2b2d42; text-shadow:none; }
-  body.light-theme .brand { color:#2b2d42; text-shadow:none; }
-  body.light-theme .clock-row { color:#7a3e9d; text-shadow:none; }
-  body.light-theme .tabs { background:rgba(255,255,255,0.55); border-color:rgba(255,255,255,0.6); }
-  body.light-theme .tab-btn { color:#2b2d42; }
-  body.light-theme .card { background:#ffffff; }
-  body.light-theme footer { color:#3a3a55; text-shadow:none; }
-  body.light-theme .footer-links a { color:#7a3e9d; }
-  body.light-theme .footer-links a:hover { color:#ff6a88; }
-</style>
+    /* Responsive */
+    @media (max-width: 480px) {
+      .card {
+        padding: 22px 16px;
+      }
+      .topbar {
+        padding: 12px 16px;
+      }
+      .brand {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- TOP BAR -->
   <div class="topbar">
     <div class="brand">Smart<span>Attend</span></div>
     <div class="status-row">
       <span class="status-dot" id="statusDot"></span>
-      <span id="statusText">Connecting...</span>
-      <span id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</span>
+      <span id="statusText">Connecting</span>
+      <button id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌤️</button>
     </div>
   </div>
   <div class="clock-row" id="clockRow">--</div>
 
+  <!-- TABS -->
   <div class="tabs">
-    <div class="tab-btn active" id="studentTabBtn" onclick="switchTab('student')">Student</div>
-    <div class="tab-btn" id="teacherTabBtn" onclick="switchTab('teacher')">Teacher</div>
+    <button class="tab-btn active" id="studentTabBtn" onclick="switchTab('student')">Student</button>
+    <button class="tab-btn" id="teacherTabBtn" onclick="switchTab('teacher')">Teacher</button>
   </div>
 
-  <!-- ================= STUDENT TAB ================= -->
+  <!-- ===== STUDENT TAB ===== -->
   <div id="studentTab">
-
     <div class="card" id="closedCard" style="display:none;">
       <div class="closed-msg">
-        🔒 Attendance window closed.<br>
-        Open between <b id="windowText"></b>.<br>
-        Try again during class hours.
+        🔒 Attendance window closed<br>
+        Open between <b id="windowText"></b><br>
+        Try during class hours
       </div>
     </div>
 
     <div class="card" id="scanCard">
       <h2>Mark Attendance</h2>
-      <span class="welcome-tag" id="welcomeTag"></span>
+      <div style="text-align:center;"><span class="welcome-tag" id="welcomeTag"></span></div>
 
-      <div id="classInfoBox" style="display:none; text-align:center; margin-bottom:10px;">
+      <div id="classInfoBox" style="display:none; text-align:center; margin-bottom:12px;">
         <span class="badge" id="classBadge"></span>
         <span class="badge" id="subjectBadge"></span>
       </div>
 
       <div id="preScanArea">
         <button class="primary" onclick="startScanner()">📷 Scan QR Code</button>
-        <div class="scan-hint" style="margin-top:10px;">If the camera isn't working, inform your teacher — they will mark attendance manually for you.</div>
-
+        <div class="scan-hint" style="margin-top:8px;">If camera fails, ask teacher to mark manually</div>
         <div id="qrVideoWrap">
           <video id="qrVideo" playsinline></video>
           <canvas id="qrCanvasHidden"></canvas>
-          <div class="scan-hint">Point camera at the QR shown by your teacher</div>
+          <div class="scan-hint">Point at teacher's QR</div>
           <button class="secondary" onclick="stopScanner()">Cancel Scan</button>
         </div>
       </div>
@@ -319,10 +551,10 @@
     </div>
 
     <div class="card">
-      <h3>📋 My Attendance History</h3>
+      <h3>📋 My History</h3>
       <div class="input-box">
         <input type="text" id="histRoll" placeholder=" " />
-        <label>Enter Roll Number</label>
+        <label>Roll Number</label>
         <div class="input-line"></div>
       </div>
       <button class="primary" onclick="loadHistory()">View History</button>
@@ -330,10 +562,10 @@
     </div>
   </div>
 
-  <!-- ================= TEACHER TAB ================= -->
+  <!-- ===== TEACHER TAB ===== -->
   <div id="teacherTab" style="display:none;">
     <div class="card">
-      <h2>Generate Session QR</h2>
+      <h2>Generate QR</h2>
       <div class="input-box select-box">
         <select id="teacherClass">
           <option value="">-- Select Class --</option>
@@ -355,7 +587,6 @@
         <div class="input-line"></div>
       </div>
       <button class="primary" onclick="generateTeacherQR()">Generate QR</button>
-
       <div id="teacherQrBox">
         <div id="qrcodeCanvasHolder"></div>
         <div class="scan-hint" id="qrValidText"></div>
@@ -411,41 +642,31 @@
         </select>
         <div class="input-line"></div>
       </div>
-      <div class="scan-hint" style="margin-bottom:10px;">1 = Present, 0 = Absent / Holiday</div>
-      <button class="primary" onclick="downloadMonthlyReport()">⬇ Download Monthly Report (1/0)</button>
+      <div class="scan-hint" style="margin-bottom:10px;">1 = Present, 0 = Absent</div>
+      <button class="primary" onclick="downloadMonthlyReport()">⬇ Download Report (1/0)</button>
       <div id="monthlyReportStatus" style="margin-top:10px;"></div>
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer>
-    Smart Attendance System &copy; 2026<br>
-    Built by Muthupriyan &middot; muthupriyan-dev
+    Smart Attendance &copy; 2026 · Muthupriyan
     <div class="footer-links">
-      <a href="https://github.com/muthupriyan-dev" target="_blank" title="GitHub">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 4.93 3.2 9.11 7.64 10.59.56.1.76-.24.76-.54 0-.27-.01-1.16-.02-2.11-3.11.68-3.77-1.32-3.77-1.32-.51-1.29-1.24-1.63-1.24-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.24.92.1-.72.39-1.21.71-1.49-2.48-.28-5.09-1.24-5.09-5.51 0-1.22.43-2.21 1.15-2.99-.11-.28-.5-1.42.11-2.96 0 0 .94-.3 3.08 1.14a10.7 10.7 0 0 1 5.6 0c2.14-1.44 3.08-1.14 3.08-1.14.61 1.54.22 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.28-2.62 5.23-5.11 5.5.4.35.76 1.04.76 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.2.65.77.54A11.04 11.04 0 0 0 23.02 11.5C23.02 5.24 18.27.5 12 .5Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank" title="LinkedIn">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/itz.muthuu" target="_blank" title="Instagram">
-        <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07Zm0-2.16C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56a5.9 5.9 0 0 0-2.13 1.39A5.9 5.9 0 0 0 .62 4.15c-.3.76-.5 1.63-.56 2.91C0 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.3.78.69 1.44 1.39 2.13a5.9 5.9 0 0 0 2.13 1.39c.76.3 1.63.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56a5.9 5.9 0 0 0 2.13-1.39 5.9 5.9 0 0 0 1.39-2.13c.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.39-2.13A5.9 5.9 0 0 0 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84Zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4Zm6.41-10.85a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
-      </a>
-      <a href="mailto:smuthupriyan020108@gmail.com" title="Email">
-        <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor"><path d="M2 4h20c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H2c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm0 2v.01L12 13 22 6.01V6H2Zm0 12h20V8.24l-9.4 6.46a1 1 0 0 1-1.2 0L2 8.24V18Z"/></svg>
-      </a>
+      <a href="https://github.com/muthupriyan-dev" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.instagram.com/itz.muthuu" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:smuthupriyan020108@gmail.com"><i class="fas fa-envelope"></i></a>
     </div>
   </footer>
 
-  <!-- Firebase -->
+  <!-- Firebase + Libraries -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
-  <!-- jsQR for scanning -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-  <!-- QRCode.js for generating -->
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
   <script>
-    // ---------------- Firebase config ----------------
+    // ================= FIREBASE =================
     const firebaseConfig = {
       apiKey: "AIzaSyAOadS2ltGbZis_W_1D8O_pgCJkEiED4Xk",
       authDomain: "smart-attendance-ac361.firebaseapp.com",
@@ -458,10 +679,10 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ---------------- Attendance window (edit hours here) ----------------
-    const WINDOW_START_MIN = 7 * 60;        // 7:00 AM
-    const WINDOW_END_MIN   = 16 * 60 + 30;  // 4:30 PM
-    document.getElementById('windowText').textContent = `7:00 AM - 4:30 PM`;
+    // ================= ATTENDANCE WINDOW =================
+    const WINDOW_START_MIN = 7 * 60;
+    const WINDOW_END_MIN = 16 * 60 + 30;
+    document.getElementById('windowText').textContent = '7:00 AM - 4:30 PM';
 
     function isWithinWindow() {
       const now = new Date();
@@ -477,59 +698,42 @@
     checkWindowLock();
     setInterval(checkWindowLock, 60000);
 
-    // ---------------- Live clock ----------------
+    // ================= CLOCK =================
     function updateClock() {
       const now = new Date();
-      const opts = { weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' };
-      document.getElementById('clockRow').textContent = now.toLocaleString('en-IN', opts);
+      document.getElementById('clockRow').textContent = now.toLocaleString('en-IN', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ---------------- Connection status ----------------
+    // ================= CONNECTION STATUS =================
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
     db.ref('.info/connected').on('value', (snap) => {
       if (snap.val() === true) {
         statusDot.classList.add('online');
-        statusText.textContent = 'Connected';
+        statusText.textContent = 'Online';
       } else {
         statusDot.classList.remove('online');
         statusText.textContent = 'Offline';
       }
     });
 
-    // ---------------- Tabs ----------------
-    // Change this PIN to whatever you want - only teachers should know it
+    // ================= TEACHER PIN =================
     const TEACHER_PIN = "2026";
     let teacherUnlocked = false;
-
-    // ---------------- Theme toggle (dark/light) ----------------
-    function applyTheme(theme) {
-      const toggleIcon = document.getElementById('themeToggle');
-      if (theme === 'light') {
-        document.body.classList.add('light-theme');
-        toggleIcon.textContent = '☀️';
-      } else {
-        document.body.classList.remove('light-theme');
-        toggleIcon.textContent = '🌙';
-      }
-      localStorage.setItem('app_theme', theme);
-    }
-
-    function toggleTheme() {
-      const isLight = document.body.classList.contains('light-theme');
-      applyTheme(isLight ? 'dark' : 'light');
-    }
-
-    // Apply saved theme on load
-    applyTheme(localStorage.getItem('app_theme') || 'dark');
 
     function switchTab(tab) {
       if (tab === 'teacher' && !teacherUnlocked) {
         const entered = prompt('Enter Teacher PIN:');
         if (entered !== TEACHER_PIN) {
-          if (entered !== null) alert('Wrong PIN. Access denied.');
+          if (entered !== null) alert('Wrong PIN.');
           return;
         }
         teacherUnlocked = true;
@@ -540,7 +744,20 @@
       document.getElementById('teacherTabBtn').classList.toggle('active', tab === 'teacher');
     }
 
-    // ================= STUDENT: class selection =================
+    // ================= THEME TOGGLE =================
+    function toggleTheme() {
+      const body = document.body;
+      const icon = document.getElementById('themeToggle');
+      if (icon.textContent === '🌤️') {
+        body.style.background = 'linear-gradient(135deg, #e8d5b7 0%, #d4b8a0 30%, #c9a88c 60%, #b8927a 85%, #a88a7a 100%)';
+        icon.textContent = '☀️';
+      } else {
+        body.style.background = 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 30%, #f5c6a0 60%, #e8a87c 85%, #d4a5a5 100%)';
+        icon.textContent = '🌤️';
+      }
+    }
+
+    // ================= STUDENT STATE =================
     let currentClass = null;
     let currentSubject = null;
 
@@ -560,7 +777,7 @@
       document.getElementById('loginForm').style.display = 'none';
     }
 
-    // ================= QR SCANNER (jsQR) =================
+    // ================= QR SCANNER =================
     let scanStream = null;
     let scanLoopId = null;
 
@@ -575,8 +792,8 @@
           video.play();
           requestAnimationFrame(scanTick);
         })
-        .catch((err) => {
-          alert('Camera access failed: ' + err.message);
+        .catch(() => {
+          alert('Camera access failed.');
           document.getElementById('qrVideoWrap').style.display = 'none';
         });
     }
@@ -610,13 +827,13 @@
               showClassBadgesAndForm();
               return;
             }
-          } catch (e) { /* not valid QR, keep scanning */ }
+          } catch (e) { /* ignore */ }
         }
       }
       scanLoopId = requestAnimationFrame(scanTick);
     }
 
-    // ================= Login form: autofill + submit =================
+    // ================= LOGIN FORM =================
     const nameInput = document.getElementById('name');
     const rollInput = document.getElementById('rollNumber');
     const form = document.getElementById('loginForm');
@@ -625,7 +842,9 @@
     const loginBtn = document.getElementById('loginBtn');
     const welcomeTag = document.getElementById('welcomeTag');
 
-    rollInput.addEventListener('input', () => { rollInput.value = rollInput.value.toUpperCase(); });
+    rollInput.addEventListener('input', () => {
+      rollInput.value = rollInput.value.toUpperCase();
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       const savedName = localStorage.getItem('student_name');
@@ -633,17 +852,17 @@
       if (savedName && savedRoll) {
         nameInput.value = savedName;
         rollInput.value = savedRoll;
-        welcomeTag.textContent = `Welcome back, ${savedName.split(' ')[0]}!`;
+        welcomeTag.textContent = 'Welcome back, ' + savedName.split(' ')[0];
         document.getElementById('histRoll').value = savedRoll;
       }
     });
 
     function getTodayKey() {
       const d = new Date();
-      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
       const name = nameInput.value.trim();
       const roll = rollInput.value.trim();
@@ -652,9 +871,9 @@
       errorMsg.textContent = '';
       successMsg.textContent = '';
 
-      if (!name) { errorMsg.textContent = 'Name venum!'; return; }
-      if (!rollPattern.test(roll)) { errorMsg.textContent = 'Correct ah Roll Number podunga (e.g. 23CSE045)'; return; }
-      if (!currentClass || !currentSubject) { errorMsg.textContent = 'Class select pannunga first'; return; }
+      if (!name) { errorMsg.textContent = 'Name required'; return; }
+      if (!rollPattern.test(roll)) { errorMsg.textContent = 'Valid Roll Number (e.g. 23CSE045)'; return; }
+      if (!currentClass || !currentSubject) { errorMsg.textContent = 'Select class first'; return; }
 
       loginBtn.disabled = true;
       loginBtn.innerHTML = '<span class="spinner"></span>Saving...';
@@ -665,9 +884,9 @@
 
       attendanceRef.once('value').then((snapshot) => {
         if (snapshot.exists()) {
-          successMsg.textContent = `${name}, attendance already marked today ✅`;
+          successMsg.textContent = `${name}, already marked today ✅`;
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Confirm Attendance';
+          loginBtn.textContent = 'Mark Attendance';
           saveToLocalStorage(name, roll);
           return;
         }
@@ -678,20 +897,18 @@
           subject: currentSubject,
           timestamp: new Date().toISOString()
         };
-        Promise.all([ attendanceRef.set(record), byRollRef.set(record) ]).then(() => {
-          successMsg.textContent = `Attendance marked successfully, ${name}! ✅`;
+        Promise.all([attendanceRef.set(record), byRollRef.set(record)]).then(() => {
+          successMsg.textContent = `Attendance marked, ${name}! ✅`;
           saveToLocalStorage(name, roll);
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Confirm Attendance';
-        }).catch((err) => {
-          errorMsg.textContent = 'Error saving data. Try again.';
-          console.error(err);
+          loginBtn.textContent = 'Mark Attendance';
+        }).catch(() => {
+          errorMsg.textContent = 'Error saving. Try again.';
           loginBtn.disabled = false;
           loginBtn.textContent = 'Mark Attendance';
         });
-      }).catch((err) => {
-        errorMsg.textContent = 'Connection error. Check internet.';
-        console.error(err);
+      }).catch(() => {
+        errorMsg.textContent = 'Connection error.';
         loginBtn.disabled = false;
         loginBtn.textContent = 'Mark Attendance';
       });
@@ -702,16 +919,16 @@
       localStorage.setItem('student_roll', roll);
     }
 
-    // ================= History =================
+    // ================= HISTORY =================
     function loadHistory() {
       const roll = document.getElementById('histRoll').value.trim().toUpperCase();
       const listDiv = document.getElementById('historyList');
-      if (!roll) { listDiv.innerHTML = '<div class="error-msg">Roll number venum</div>'; return; }
+      if (!roll) { listDiv.innerHTML = '<div class="error-msg">Enter roll number</div>'; return; }
       listDiv.innerHTML = '<div class="scan-hint">Loading...</div>';
 
       db.ref(`attendanceByRoll/${roll}`).once('value').then((snap) => {
         if (!snap.exists()) {
-          listDiv.innerHTML = '<div class="scan-hint">No attendance records found.</div>';
+          listDiv.innerHTML = '<div class="scan-hint">No records found.</div>';
           return;
         }
         const data = snap.val();
@@ -721,21 +938,20 @@
           const entry = data[date];
           html += `<div class="history-item">
             <div><div class="history-date">${date}</div><div class="history-sub">${entry.subject || ''} (${entry.class || ''})</div></div>
-            <div class="history-sub">${new Date(entry.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})}</div>
+            <div class="history-sub">${new Date(entry.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
           </div>`;
         });
         listDiv.innerHTML = html;
-      }).catch((err) => {
-        listDiv.innerHTML = '<div class="error-msg">Error loading history</div>';
-        console.error(err);
+      }).catch(() => {
+        listDiv.innerHTML = '<div class="error-msg">Error loading</div>';
       });
     }
 
-    // ================= TEACHER: Generate QR =================
+    // ================= TEACHER: GENERATE QR =================
     function generateTeacherQR() {
       const cls = document.getElementById('teacherClass').value;
       const sub = document.getElementById('teacherSubject').value.trim();
-      if (!cls || !sub) { alert('Class & Subject select pannunga'); return; }
+      if (!cls || !sub) { alert('Select class & subject'); return; }
 
       const payload = JSON.stringify({
         class: cls,
@@ -747,16 +963,15 @@
       holder.innerHTML = '';
       new QRCode(holder, {
         text: payload,
-        width: 220,
-        height: 220,
-        colorDark: '#191919',
+        width: 200,
+        height: 200,
+        colorDark: '#1a1a2e',
         colorLight: '#ffffff'
       });
-      document.getElementById('qrValidText').textContent =
-        `${cls} - ${sub} | Valid for today (${getTodayKey()})`;
+      document.getElementById('qrValidText').textContent = `${cls} · ${sub} · ${getTodayKey()}`;
     }
 
-    // ================= TEACHER: View who attended =================
+    // ================= TEACHER: VIEW ATTENDANCE =================
     let lastLoadedEntries = [];
     let lastLoadedDateKey = '';
 
@@ -771,133 +986,115 @@
 
       db.ref(`attendance/${dateKey}`).once('value').then((snap) => {
         if (!snap.exists()) {
-          listDiv.innerHTML = '<div class="scan-hint">No attendance records for this date.</div>';
+          listDiv.innerHTML = '<div class="scan-hint">No records.</div>';
           lastLoadedEntries = [];
           return;
         }
-        const data = snap.val();
-        let entries = Object.values(data);
-        if (classFilter) {
-          entries = entries.filter(e => e.class === classFilter);
-        }
-        if (entries.length === 0) {
-          listDiv.innerHTML = '<div class="scan-hint">No students found for this class on this date.</div>';
+        let entries = Object.values(snap.val());
+        if (classFilter) entries = entries.filter(e => e.class === classFilter);
+        if (!entries.length) {
+          listDiv.innerHTML = '<div class="scan-hint">No students for this class.</div>';
           lastLoadedEntries = [];
           return;
         }
         entries.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         lastLoadedEntries = entries;
-        let html = `<div class="scan-hint" style="margin-bottom:8px;">${entries.length} student(s) marked present</div>`;
-        entries.forEach((entry) => {
+        let html = `<div class="scan-hint" style="margin-bottom:8px;">${entries.length} present</div>`;
+        entries.forEach((e) => {
           html += `<div class="history-item">
-            <div><div class="history-date">${entry.name}</div><div class="history-sub">${entry.roll} &middot; ${entry.class} &middot; ${entry.subject}</div></div>
-            <div class="history-sub">${new Date(entry.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})}</div>
+            <div><div class="history-date">${e.name}</div><div class="history-sub">${e.roll} · ${e.class} · ${e.subject}</div></div>
+            <div class="history-sub">${new Date(e.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
           </div>`;
         });
         listDiv.innerHTML = html;
-      }).catch((err) => {
-        listDiv.innerHTML = '<div class="error-msg">Error loading attendance</div>';
-        console.error(err);
+      }).catch(() => {
+        listDiv.innerHTML = '<div class="error-msg">Error</div>';
       });
     }
 
     function downloadAttendanceCSV() {
-      if (!lastLoadedEntries || lastLoadedEntries.length === 0) {
-        alert('Show attendance first, then download.');
-        return;
-      }
+      if (!lastLoadedEntries.length) { alert('Load attendance first.'); return; }
       let csv = 'Name,Roll Number,Class,Subject,Time\n';
-      lastLoadedEntries.forEach((entry) => {
-        const time = new Date(entry.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
-        csv += `"${entry.name}","${entry.roll}","${entry.class}","${entry.subject}","${time}"\n`;
+      lastLoadedEntries.forEach((e) => {
+        const time = new Date(e.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        csv += `"${e.name}","${e.roll}","${e.class}","${e.subject}","${time}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = URL.createObjectURL(blob);
       a.download = `attendance_${lastLoadedDateKey || getTodayKey()}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
     }
 
-    // ================= TEACHER: Monthly Report (1/0 grid) =================
+    // ================= TEACHER: MONTHLY REPORT =================
     function downloadMonthlyReport() {
-      const monthInput = document.getElementById('reportMonth').value; // format: "2026-06"
+      const monthInput = document.getElementById('reportMonth').value;
       const classFilter = document.getElementById('reportClass').value;
       const statusDiv = document.getElementById('monthlyReportStatus');
 
-      if (!monthInput) { alert('Month select pannunga'); return; }
+      if (!monthInput) { alert('Select month'); return; }
 
       const [year, month] = monthInput.split('-').map(Number);
       const daysInMonth = new Date(year, month, 0).getDate();
+      statusDiv.innerHTML = '<div class="scan-hint">Generating...</div>';
 
-      statusDiv.innerHTML = '<div class="scan-hint">Loading data, please wait...</div>';
-
-      // Build all date keys for the month, e.g. 2026-06-01, 2026-06-02 ...
       const dateKeys = [];
       for (let d = 1; d <= daysInMonth; d++) {
-        dateKeys.push(`${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+        dateKeys.push(`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
       }
 
-      // Fetch attendance for every day in parallel
       const fetches = dateKeys.map(dateKey =>
         db.ref(`attendance/${dateKey}`).once('value').then(snap => ({ dateKey, data: snap.exists() ? snap.val() : null }))
       );
 
       Promise.all(fetches).then((results) => {
-        // studentMap: { roll: { name, days: { 1: true, 2: true, ... } } }
         const studentMap = {};
-
         results.forEach(({ dateKey, data }) => {
           if (!data) return;
           const dayNum = parseInt(dateKey.split('-')[2], 10);
           Object.values(data).forEach((entry) => {
             if (classFilter && entry.class !== classFilter) return;
-            if (!studentMap[entry.roll]) {
-              studentMap[entry.roll] = { name: entry.name, days: {} };
-            }
+            if (!studentMap[entry.roll]) studentMap[entry.roll] = { name: entry.name, days: {} };
             studentMap[entry.roll].days[dayNum] = true;
           });
         });
 
         const rolls = Object.keys(studentMap).sort();
-        if (rolls.length === 0) {
-          statusDiv.innerHTML = '<div class="scan-hint">No attendance data found for this month.</div>';
+        if (!rolls.length) {
+          statusDiv.innerHTML = '<div class="scan-hint">No data for this month.</div>';
           return;
         }
 
-        // Build CSV header: Roll Number, Name, 1, 2, 3 ... daysInMonth
         let header = ['Roll Number', 'Name'];
         for (let d = 1; d <= daysInMonth; d++) header.push(String(d));
         let csv = header.join(',') + '\n';
 
         rolls.forEach((roll) => {
-          const student = studentMap[roll];
-          let row = [`"${roll}"`, `"${student.name}"`];
+          const s = studentMap[roll];
+          let row = [`"${roll}"`, `"${s.name}"`];
           for (let d = 1; d <= daysInMonth; d++) {
-            row.push(student.days[d] ? '1' : '0');
+            row.push(s.days[d] ? '1' : '0');
           }
           csv += row.join(',') + '\n';
         });
 
         const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `monthly_report_${monthInput}${classFilter ? '_' + classFilter : ''}.csv`;
+        a.href = URL.createObjectURL(blob);
+        a.download = `monthly_${monthInput}${classFilter ? '_' + classFilter : ''}.csv`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        statusDiv.innerHTML = `<div class="success-msg">Report downloaded — ${rolls.length} student(s)</div>`;
-      }).catch((err) => {
-        statusDiv.innerHTML = '<div class="error-msg">Error generating report</div>';
-        console.error(err);
+        statusDiv.innerHTML = `<div class="success-msg">Downloaded — ${rolls.length} students</div>`;
+      }).catch(() => {
+        statusDiv.innerHTML = '<div class="error-msg">Error</div>';
       });
     }
+
+    // Set default date
+    document.getElementById('viewDate').value = getTodayKey();
   </script>
 </body>
 </html>
