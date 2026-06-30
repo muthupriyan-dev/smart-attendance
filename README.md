@@ -1,3 +1,12 @@
+<p align="center">
+  <img src="assets/banner.png" alt="SmartAttend Banner" width="100%">
+</p>
+
+<h1 align="center">🎓 SmartAttend</h1>
+
+<p align="center">
+A Modern Smart Attendance Management System built with HTML, CSS, JavaScript & Firebase.
+</p>
 # 🎓 SmartAttend
 
 A modern, responsive, and secure **Smart Attendance Management System** built using **HTML, CSS, JavaScript, and Firebase**.
