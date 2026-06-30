@@ -49,10 +49,10 @@ A Modern Smart Attendance Management System built with HTML, CSS, JavaScript & F
 
 
 ### History
-![History](assets/screenshots/history.png)
+![History](assets/history.png)
 
 ### Teacher
-![Teacher](assets/screenshots/teacher.png)
+![Teacher](assets/teacher.png)
 
 ---
 
