@@ -3,10 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Attendance · Glass UI</title>
+  <title>Smart Attendance · Premium UI</title>
+  <!-- Font & Icons (Heroicons + Font Awesome fallback) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@heroicons/react/outline/index.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
+
+    /* ----- CSS Variables (Light & Dark) ----- */
+    :root {
+      --bg: #f6f3f0;
+      --card-bg: rgba(255, 255, 255, 0.70);
+      --card-border: rgba(255, 255, 255, 0.5);
+      --text-primary: #1e1e2a;
+      --text-secondary: #3d3d5c;
+      --text-muted: #6b6b8a;
+      --glass-blur: 8px;
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+      --radius-sm: 14px;
+      --orange: #e67e22;
+      --orange-light: #f39c12;
+      --green: #27ae60;
+      --green-light: #2ecc71;
+      --red: #e74c3c;
+      --red-light: #ef5350;
+      --blue: #3498db;
+      --blue-light: #5dade2;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode */
+    [data-theme="dark"] {
+      --bg: #12121a;
+      --card-bg: rgba(30, 30, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f0f0f4;
+      --text-secondary: #c8c8dd;
+      --text-muted: #8a8aaa;
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.5);
+    }
 
     * {
       margin: 0;
@@ -17,194 +57,255 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 30%, #f5c6a0 60%, #e8a87c 85%, #d4a5a5 100%);
-      background-attachment: fixed;
+      background: var(--bg);
       padding: 20px 16px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background 0.4s ease, color 0.3s ease;
+      color: var(--text-primary);
     }
 
-    /* Glassmorphism base */
+    /* smooth fade-in for cards */
+    .card, .stat-card, .quick-stat {
+      animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass (reduced) */
     .glass {
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
     }
 
-    /* Top Bar */
-    .topbar {
+    /* ----- Layout containers ----- */
+    .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ----- Top Bar ----- */
+    .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 22px;
-      border-radius: 50px;
-      margin-bottom: 16px;
-      background: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      padding: 12px 20px;
+      border-radius: 60px;
+      margin-bottom: 12px;
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
     }
-
     .brand {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #2d2d44, #5a3d5c);
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #2d2d5e, #b14a6b);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: -0.5px;
     }
     .brand span {
-      background: linear-gradient(135deg, #c0392b, #e67e22);
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-
-    .status-row {
+    .topbar-right {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: #2d2d44;
+      color: var(--text-secondary);
     }
     .status-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #e74c3c;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+      background: var(--red);
       transition: 0.3s;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
     }
     .status-dot.online {
-      background: #27ae60;
-      box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.3);
+      background: var(--green);
+      box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
     }
     #themeToggle {
-      cursor: pointer;
-      font-size: 1.1rem;
-      opacity: 0.7;
-      transition: 0.3s;
       background: none;
       border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: 0.2s;
+      padding: 4px;
+      border-radius: 50%;
     }
-    #themeToggle:hover { opacity: 1; }
+    #themeToggle:hover {
+      background: rgba(0,0,0,0.04);
+    }
 
     /* Clock */
     .clock-row {
-      width: 100%;
-      max-width: 500px;
       text-align: center;
       font-weight: 500;
-      font-size: 0.82rem;
-      padding: 8px 16px;
+      font-size: 0.8rem;
+      padding: 6px 16px;
       border-radius: 30px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      margin-bottom: 20px;
-      color: #2d2d44;
-      letter-spacing: 0.3px;
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--card-border);
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 0.2px;
+      box-shadow: var(--shadow-sm);
     }
+
+    /* Quick Stats Row */
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .quick-stat {
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .quick-stat:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .quick-stat .label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+    }
+    .quick-stat .value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-top: 2px;
+      color: var(--text-primary);
+    }
+    .quick-stat .value.green { color: var(--green); }
+    .quick-stat .value.orange { color: var(--orange); }
+    .quick-stat .value.blue { color: var(--blue); }
 
     /* Tabs */
     .tabs {
       display: flex;
-      width: 100%;
-      max-width: 500px;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 50px;
-      padding: 6px;
-      margin-bottom: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border-radius: 60px;
+      padding: 5px;
+      margin-bottom: 18px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
     }
     .tab-btn {
       flex: 1;
-      padding: 12px 0;
+      padding: 10px 0;
       text-align: center;
       border-radius: 40px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 0.85rem;
-      color: #2d2d44;
-      transition: all 0.3s ease;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
       background: transparent;
       border: none;
     }
     .tab-btn.active {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255,255,255,0.5);
       backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
     }
 
     /* Cards */
     .card {
-      width: 100%;
-      max-width: 500px;
-      padding: 28px 24px;
-      border-radius: 28px;
-      margin-bottom: 18px;
-      background: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(18px) saturate(180%);
-      -webkit-backdrop-filter: blur(18px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
-      color: #1a1a2e;
-      transition: all 0.25s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
     }
     .card:hover {
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow-md);
     }
 
     h2 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      text-align: center;
+      letter-spacing: -0.4px;
       background: linear-gradient(135deg, #2d2d5e, #b14a6b);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+      text-align: center;
     }
     h3 {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: #1e1e3a;
-      margin-bottom: 14px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
+    /* Closed card */
     .closed-msg {
       text-align: center;
-      padding: 24px 12px;
-      font-weight: 600;
-      color: #2d2d44;
-      background: rgba(255, 215, 215, 0.2);
-      border-radius: 24px;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 28px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(231, 76, 60, 0.06);
+      border: 1px solid rgba(231, 76, 60, 0.15);
+    }
+    .closed-msg .icon-wrap {
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .closed-msg .title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--red);
+    }
+    .closed-msg .sub {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
     }
 
     /* Inputs */
     .input-box {
       position: relative;
       width: 100%;
-      margin: 20px 0;
+      margin: 18px 0;
     }
     .input-box .input-line {
       position: absolute;
@@ -218,16 +319,16 @@
     }
     .input-box input:focus ~ .input-line,
     .input-box select:focus ~ .input-line {
-      background: linear-gradient(90deg, #b14a6b, #d68b6b);
-      box-shadow: 0 0 16px rgba(177, 74, 107, 0.15);
+      background: linear-gradient(90deg, #b14a6b, var(--orange-light));
+      box-shadow: 0 0 12px rgba(177, 74, 107, 0.1);
     }
     .input-box label {
       position: absolute;
       top: 50%;
       left: 6px;
       transform: translateY(-50%);
-      font-size: 0.9rem;
-      color: #4a4a6a;
+      font-size: 0.85rem;
+      color: var(--text-muted);
       pointer-events: none;
       transition: 0.25s;
       font-weight: 500;
@@ -235,429 +336,409 @@
     .input-box input:focus ~ label,
     .input-box input:not(:placeholder-shown) ~ label {
       top: -10px;
-      font-size: 0.7rem;
-      color: #a14a6b;
+      font-size: 0.65rem;
+      color: var(--orange);
       font-weight: 700;
     }
     .input-box.select-box label {
       position: static;
       display: block;
       transform: none;
-      font-size: 0.75rem;
-      color: #2d2d5e;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .input-box input,
     .input-box select {
       width: 100%;
-      height: 48px;
+      height: 46px;
       background: transparent;
       border: none;
       outline: none;
-      font-size: 0.95rem;
-      color: #1a1a2e;
+      font-size: 0.9rem;
+      color: var(--text-primary);
       padding: 0 6px;
       border-bottom: 2.5px solid rgba(0, 0, 0, 0.06);
       font-weight: 500;
     }
     .input-box select {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255,255,255,0.1);
       border-radius: 12px;
       padding: 0 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      height: 50px;
+      border: 1px solid var(--card-border);
+      height: 48px;
     }
     select option {
-      background: rgba(255, 255, 255, 0.95);
-      color: #1a1a2e;
+      background: var(--card-bg);
+      color: var(--text-primary);
     }
 
+    /* Badge */
     .badge {
       display: inline-block;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255,255,255,0.4);
       backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      color: #1e1e3a;
-      padding: 6px 16px;
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      padding: 4px 14px;
       border-radius: 30px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      margin: 4px 4px 4px 0;
+      margin: 3px 3px 3px 0;
     }
 
-    /* Buttons */
-    button.primary {
+    /* Buttons with ripple */
+    .btn {
       width: 100%;
-      height: 50px;
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      height: 48px;
+      border: none;
       border-radius: 40px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      color: #1a1a2e;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      color: #fff;
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
+      box-shadow: 0 4px 16px rgba(230, 126, 34, 0.25);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
       margin-top: 4px;
     }
-    button.primary:hover {
-      background: rgba(255, 255, 255, 0.75);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(230, 126, 34, 0.35);
     }
-    button.primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
+    .btn:active {
+      transform: scale(0.97);
     }
-
-    button.secondary {
-      width: 100%;
-      height: 44px;
-      background: rgba(255, 255, 255, 0.12);
+    .btn-secondary {
+      background: rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 40px;
-      color: #1e1e3a;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.2s;
-      margin-top: 10px;
+      color: var(--text-primary);
+      box-shadow: none;
+      border: 1px solid var(--card-border);
     }
-    button.secondary:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.35);
+      box-shadow: var(--shadow-sm);
     }
 
-    .error-msg {
-      color: #c0392b;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-top: 6px;
-      text-align: center;
-    }
-    .success-msg {
-      color: #1e7e4a;
-      font-weight: 600;
-      font-size: 0.85rem;
-      margin-top: 6px;
-      text-align: center;
-    }
-    .welcome-tag {
-      text-align: center;
-      font-weight: 600;
-      color: #2d2d5e;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-      padding: 6px 18px;
-      display: inline-block;
-      margin: 0 auto 12px;
-      font-size: 0.9rem;
-    }
-
-    /* Video / QR */
-    #qrVideoWrap {
-      display: none;
-      margin-top: 16px;
-    }
-    video {
-      width: 100%;
-      border-radius: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      background: #0a0a1a;
-    }
-    #qrCanvasHidden {
-      display: none;
-    }
-    .scan-hint {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #3a3a5a;
-      opacity: 0.7;
-      margin-top: 8px;
-      font-weight: 500;
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2.5px solid rgba(0, 0, 0, 0.08);
-      border-top-color: #1a1a2e;
+    /* Ripple effect */
+    .ripple {
+      position: absolute;
       border-radius: 50%;
-      display: inline-block;
-      margin-right: 8px;
-      vertical-align: middle;
-      animation: spin 0.7s linear infinite;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0);
+      animation: rippleAnim 0.6s ease-out;
+      pointer-events: none;
     }
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
     }
 
-    #teacherQrBox {
+    /* History stats */
+    .history-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-mini {
+      background: rgba(255,255,255,0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 6px;
       text-align: center;
-      margin-top: 18px;
+      border: 1px solid var(--card-border);
     }
-    #qrcodeCanvasHolder {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(4px);
-      padding: 16px;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      margin-top: 8px;
+    .stat-mini .num {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-primary);
     }
-    #qrcodeCanvasHolder canvas {
-      display: block;
-      margin: 0 auto;
+    .stat-mini .lbl {
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
     }
+    .stat-mini .num.green { color: var(--green); }
+    .stat-mini .num.orange { color: var(--orange); }
+    .stat-mini .num.red { color: var(--red); }
+    .stat-mini .num.blue { color: var(--blue); }
 
-    /* History */
+    /* History list */
     .history-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-      font-size: 0.9rem;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      font-size: 0.85rem;
     }
-    .history-item:last-child {
-      border-bottom: none;
+    .history-item:last-child { border-bottom: none; }
+    .history-date { font-weight: 700; color: var(--text-primary); }
+    .history-sub { color: var(--text-muted); font-size: 0.75rem; }
+
+    /* QR */
+    #qrVideoWrap { display: none; margin-top: 14px; }
+    video { width: 100%; border-radius: var(--radius-sm); border: 2px solid var(--card-border); background: #0a0a1a; }
+    #qrCanvasHidden { display: none; }
+    .scan-hint { text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
+    #teacherQrBox { text-align: center; margin-top: 14px; }
+    #qrcodeCanvasHolder { display: inline-block; background: rgba(255,255,255,0.1); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--card-border); margin-top: 6px; }
+
+    .spinner {
+      width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.2);
+      border-top-color: #fff; border-radius: 50%; display: inline-block;
+      margin-right: 8px; vertical-align: middle; animation: spin 0.7s linear infinite;
     }
-    .history-date {
-      font-weight: 700;
-      color: #1a1a2e;
-    }
-    .history-sub {
-      color: #4a4a6a;
-      font-size: 0.8rem;
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg { color: var(--red); font-weight: 600; font-size: 0.8rem; margin-top: 4px; text-align: center; }
+    .success-msg { color: var(--green); font-weight: 600; font-size: 0.8rem; margin-top: 4px; text-align: center; }
+    .welcome-tag { font-weight: 600; color: var(--text-secondary); background: rgba(255,255,255,0.15); border-radius: 30px; padding: 4px 16px; display: inline-block; font-size: 0.85rem; }
 
     /* Footer */
     footer {
-      margin-top: 16px;
+      margin-top: 12px;
       text-align: center;
-      color: #1a1a2e;
       font-weight: 500;
-      font-size: 0.78rem;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(8px);
-      padding: 14px 20px;
+      font-size: 0.7rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      padding: 14px 18px;
       border-radius: 60px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--card-border);
       width: 100%;
-      max-width: 500px;
+      max-width: 540px;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-sm);
     }
     .footer-links {
-      margin-top: 8px;
+      margin-top: 6px;
       display: flex;
       justify-content: center;
-      gap: 18px;
+      gap: 16px;
     }
     .footer-links a {
-      color: #2d2d44;
+      color: var(--text-secondary);
       text-decoration: none;
-      font-size: 1.2rem;
-      transition: 0.2s;
+      font-size: 1.1rem;
+      transition: var(--transition);
       opacity: 0.6;
     }
-    .footer-links a:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
+    .footer-links a:hover { opacity: 1; transform: translateY(-2px); }
 
     /* Responsive */
     @media (max-width: 480px) {
-      .card {
-        padding: 22px 16px;
-      }
-      .topbar {
-        padding: 12px 16px;
-      }
-      .brand {
-        font-size: 1.1rem;
-      }
+      .card { padding: 18px 14px; }
+      .quick-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .quick-stat { padding: 10px 6px; }
+      .quick-stat .value { font-size: 1.1rem; }
+      .history-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .container { max-width: 600px; }
+    }
+
+    /* Focus states */
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
+  <div class="container">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="brand">Smart<span>Attend</span></div>
-    <div class="status-row">
-      <span class="status-dot" id="statusDot"></span>
-      <span id="statusText">Connecting</span>
-      <button id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌤️</button>
-    </div>
-  </div>
-  <div class="clock-row" id="clockRow">--</div>
-
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" id="studentTabBtn" onclick="switchTab('student')">Student</button>
-    <button class="tab-btn" id="teacherTabBtn" onclick="switchTab('teacher')">Teacher</button>
-  </div>
-
-  <!-- ===== STUDENT TAB ===== -->
-  <div id="studentTab">
-    <div class="card" id="closedCard" style="display:none;">
-      <div class="closed-msg">
-        🔒 Attendance window closed<br>
-        Open between <b id="windowText"></b><br>
-        Try during class hours
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">Smart<span>Attend</span></div>
+      <div class="topbar-right">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Connecting</span>
+        <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
       </div>
     </div>
+    <div class="clock-row" id="clockRow">--</div>
 
-    <div class="card" id="scanCard">
-      <h2>Mark Attendance</h2>
-      <div style="text-align:center;"><span class="welcome-tag" id="welcomeTag"></span></div>
+    <!-- QUICK STATS -->
+    <div class="quick-stats" id="quickStats">
+      <div class="quick-stat"><div class="label">Today</div><div class="value blue" id="qsToday">—</div></div>
+      <div class="quick-stat"><div class="label">Attendance</div><div class="value green" id="qsPercent">—</div></div>
+      <div class="quick-stat"><div class="label">Streak</div><div class="value orange" id="qsStreak">—</div></div>
+    </div>
 
-      <div id="classInfoBox" style="display:none; text-align:center; margin-bottom:12px;">
-        <span class="badge" id="classBadge"></span>
-        <span class="badge" id="subjectBadge"></span>
-      </div>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" id="studentTabBtn" onclick="switchTab('student')">Student</button>
+      <button class="tab-btn" id="teacherTabBtn" onclick="switchTab('teacher')">Teacher</button>
+    </div>
 
-      <div id="preScanArea">
-        <button class="primary" onclick="startScanner()">📷 Scan QR Code</button>
-        <div class="scan-hint" style="margin-top:8px;">If camera fails, ask teacher to mark manually</div>
-        <div id="qrVideoWrap">
-          <video id="qrVideo" playsinline></video>
-          <canvas id="qrCanvasHidden"></canvas>
-          <div class="scan-hint">Point at teacher's QR</div>
-          <button class="secondary" onclick="stopScanner()">Cancel Scan</button>
+    <!-- STUDENT -->
+    <div id="studentTab">
+      <!-- Closed card -->
+      <div class="card" id="closedCard" style="display:none;">
+        <div class="closed-msg">
+          <span class="icon-wrap">⏰</span>
+          <div class="title">Attendance Window Closed</div>
+          <div class="sub">Open between <b id="windowText"></b></div>
+          <div class="sub" style="margin-top:4px; font-size:0.8rem;">Please try again during class hours</div>
         </div>
       </div>
 
-      <form id="loginForm" style="display:none; margin-top:10px;">
-        <div class="input-box">
-          <input type="text" id="name" required placeholder=" " />
-          <label>Name</label>
-          <div class="input-line"></div>
+      <!-- Scan card -->
+      <div class="card" id="scanCard">
+        <h2>Mark Attendance</h2>
+        <div style="text-align:center;"><span class="welcome-tag" id="welcomeTag"></span></div>
+        <div id="classInfoBox" style="display:none; text-align:center; margin-bottom:10px;">
+          <span class="badge" id="classBadge"></span>
+          <span class="badge" id="subjectBadge"></span>
         </div>
+
+        <div id="preScanArea">
+          <button class="btn" onclick="startScanner()">📷 Scan QR Code</button>
+          <div class="scan-hint" style="margin-top:6px;">If camera fails, ask teacher to mark manually</div>
+          <div id="qrVideoWrap">
+            <video id="qrVideo" playsinline></video>
+            <canvas id="qrCanvasHidden"></canvas>
+            <div class="scan-hint">Point at teacher's QR</div>
+            <button class="btn btn-secondary" onclick="stopScanner()">Cancel Scan</button>
+          </div>
+        </div>
+
+        <form id="loginForm" style="display:none; margin-top:8px;">
+          <div class="input-box">
+            <input type="text" id="name" required placeholder=" " />
+            <label>Name</label>
+            <div class="input-line"></div>
+          </div>
+          <div class="input-box">
+            <input type="text" id="rollNumber" required placeholder=" " maxlength="20" autocomplete="off" />
+            <label>Roll Number</label>
+            <div class="input-line"></div>
+          </div>
+          <div class="error-msg" id="errorMsg"></div>
+          <div class="success-msg" id="successMsg"></div>
+          <button type="submit" class="btn" id="loginBtn">Mark Attendance</button>
+          <button type="button" class="btn btn-secondary" onclick="resetClassSelection()">Change Class</button>
+        </form>
+      </div>
+
+      <!-- History card -->
+      <div class="card">
+        <h3>📋 My History</h3>
         <div class="input-box">
-          <input type="text" id="rollNumber" required placeholder=" " maxlength="20" autocomplete="off" />
+          <input type="text" id="histRoll" placeholder=" " />
           <label>Roll Number</label>
           <div class="input-line"></div>
         </div>
-        <div class="error-msg" id="errorMsg"></div>
-        <div class="success-msg" id="successMsg"></div>
-        <button type="submit" class="primary" id="loginBtn">Mark Attendance</button>
-        <button type="button" class="secondary" onclick="resetClassSelection()">Change Class</button>
-      </form>
+        <button class="btn" onclick="loadHistory()">View History</button>
+
+        <!-- Stats (hidden until history loads) -->
+        <div id="historyStats" style="display:none; margin-top:12px;">
+          <div class="history-stats" id="statsGrid">
+            <div class="stat-mini"><div class="num green" id="statPercent">0%</div><div class="lbl">Attendance</div></div>
+            <div class="stat-mini"><div class="num blue" id="statTotal">0</div><div class="lbl">Total</div></div>
+            <div class="stat-mini"><div class="num green" id="statPresent">0</div><div class="lbl">Present</div></div>
+            <div class="stat-mini"><div class="num red" id="statAbsent">0</div><div class="lbl">Absent</div></div>
+            <div class="stat-mini"><div class="num orange" id="statStreak">0</div><div class="lbl">Streak</div></div>
+            <div class="stat-mini"><div class="num blue" id="statLast">—</div><div class="lbl">Last</div></div>
+          </div>
+        </div>
+        <div id="historyList" style="margin-top:10px;"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>📋 My History</h3>
-      <div class="input-box">
-        <input type="text" id="histRoll" placeholder=" " />
-        <label>Roll Number</label>
-        <div class="input-line"></div>
+    <!-- TEACHER -->
+    <div id="teacherTab" style="display:none;">
+      <div class="card">
+        <h2>Generate QR</h2>
+        <div class="input-box select-box">
+          <select id="teacherClass">
+            <option value="">-- Select Class --</option>
+            <option value="CSE-A">CSE-A</option>
+            <option value="CSE-B">CSE-B</option>
+            <option value="IT-A">IT-A</option>
+            <option value="AIDS">AIDS</option>
+            <option value="MECH">MECH</option>
+            <option value="ROBOTICS">ROBOTICS</option>
+            <option value="EEE">EEE</option>
+            <option value="AUTO">AUTO</option>
+            <option value="BIO">BIO</option>
+          </select>
+          <div class="input-line"></div>
+        </div>
+        <div class="input-box">
+          <input type="text" id="teacherSubject" placeholder=" " />
+          <label>Subject</label>
+          <div class="input-line"></div>
+        </div>
+        <button class="btn" onclick="generateTeacherQR()">Generate QR</button>
+        <div id="teacherQrBox">
+          <div id="qrcodeCanvasHolder"></div>
+          <div class="scan-hint" id="qrValidText"></div>
+        </div>
       </div>
-      <button class="primary" onclick="loadHistory()">View History</button>
-      <div id="historyList" style="margin-top:14px;"></div>
+
+      <div class="card">
+        <h3>👥 View Attendance</h3>
+        <div class="input-box">
+          <input type="date" id="viewDate" placeholder=" " />
+          <label>Date</label>
+          <div class="input-line"></div>
+        </div>
+        <div class="input-box select-box">
+          <select id="viewClass">
+            <option value="">-- All Classes --</option>
+            <option value="CSE-A">CSE-A</option><option value="CSE-B">CSE-B</option>
+            <option value="IT-A">IT-A</option><option value="AIDS">AIDS</option>
+            <option value="MECH">MECH</option><option value="ROBOTICS">ROBOTICS</option>
+            <option value="EEE">EEE</option><option value="AUTO">AUTO</option><option value="BIO">BIO</option>
+          </select>
+          <div class="input-line"></div>
+        </div>
+        <button class="btn" onclick="loadTeacherAttendance()">Show Attendance</button>
+        <button class="btn btn-secondary" onclick="downloadAttendanceCSV()">⬇ Download CSV</button>
+        <div id="teacherAttendanceList" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="card">
+        <h3>📅 Monthly Report</h3>
+        <div class="input-box">
+          <input type="month" id="reportMonth" placeholder=" " />
+          <label>Month</label>
+          <div class="input-line"></div>
+        </div>
+        <div class="input-box select-box">
+          <select id="reportClass">
+            <option value="">-- All Classes --</option>
+            <option value="CSE-A">CSE-A</option><option value="CSE-B">CSE-B</option>
+            <option value="IT-A">IT-A</option><option value="AIDS">AIDS</option>
+            <option value="MECH">MECH</option><option value="ROBOTICS">ROBOTICS</option>
+            <option value="EEE">EEE</option><option value="AUTO">AUTO</option><option value="BIO">BIO</option>
+          </select>
+          <div class="input-line"></div>
+        </div>
+        <div class="scan-hint" style="margin-bottom:8px;">1 = Present, 0 = Absent</div>
+        <button class="btn" onclick="downloadMonthlyReport()">⬇ Download Report (1/0)</button>
+        <div id="monthlyReportStatus" style="margin-top:8px;"></div>
+      </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div>Built with HTML · CSS · JavaScript · Firebase</div>
+      <div style="margin-top:2px; font-size:0.7rem;">Smart Attendance &copy; 2026 · Muthupriyan</div>
+      <div class="footer-links">
+        <a href="https://github.com/muthupriyan-dev" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.instagram.com/itz.muthuu" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="mailto:smuthupriyan020108@gmail.com"><i class="fas fa-envelope"></i></a>
+      </div>
+    </footer>
   </div>
-
-  <!-- ===== TEACHER TAB ===== -->
-  <div id="teacherTab" style="display:none;">
-    <div class="card">
-      <h2>Generate QR</h2>
-      <div class="input-box select-box">
-        <select id="teacherClass">
-          <option value="">-- Select Class --</option>
-          <option value="CSE-A">CSE-A</option>
-          <option value="CSE-B">CSE-B</option>
-          <option value="IT-A">IT-A</option>
-          <option value="AIDS">AIDS</option>
-          <option value="MECH">MECH</option>
-          <option value="ROBOTICS">ROBOTICS</option>
-          <option value="EEE">EEE</option>
-          <option value="AUTO">AUTO</option>
-          <option value="BIO">BIO</option>
-        </select>
-        <div class="input-line"></div>
-      </div>
-      <div class="input-box">
-        <input type="text" id="teacherSubject" placeholder=" " />
-        <label>Subject</label>
-        <div class="input-line"></div>
-      </div>
-      <button class="primary" onclick="generateTeacherQR()">Generate QR</button>
-      <div id="teacherQrBox">
-        <div id="qrcodeCanvasHolder"></div>
-        <div class="scan-hint" id="qrValidText"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>👥 View Attendance</h3>
-      <div class="input-box">
-        <input type="date" id="viewDate" placeholder=" " />
-        <label>Date</label>
-        <div class="input-line"></div>
-      </div>
-      <div class="input-box select-box">
-        <select id="viewClass">
-          <option value="">-- All Classes --</option>
-          <option value="CSE-A">CSE-A</option>
-          <option value="CSE-B">CSE-B</option>
-          <option value="IT-A">IT-A</option>
-          <option value="AIDS">AIDS</option>
-          <option value="MECH">MECH</option>
-          <option value="ROBOTICS">ROBOTICS</option>
-          <option value="EEE">EEE</option>
-          <option value="AUTO">AUTO</option>
-          <option value="BIO">BIO</option>
-        </select>
-        <div class="input-line"></div>
-      </div>
-      <button class="primary" onclick="loadTeacherAttendance()">Show Attendance</button>
-      <button class="secondary" onclick="downloadAttendanceCSV()">⬇ Download CSV</button>
-      <div id="teacherAttendanceList" style="margin-top:14px;"></div>
-    </div>
-
-    <div class="card">
-      <h3>📅 Monthly Report</h3>
-      <div class="input-box">
-        <input type="month" id="reportMonth" placeholder=" " />
-        <label>Month</label>
-        <div class="input-line"></div>
-      </div>
-      <div class="input-box select-box">
-        <select id="reportClass">
-          <option value="">-- All Classes --</option>
-          <option value="CSE-A">CSE-A</option>
-          <option value="CSE-B">CSE-B</option>
-          <option value="IT-A">IT-A</option>
-          <option value="AIDS">AIDS</option>
-          <option value="MECH">MECH</option>
-          <option value="ROBOTICS">ROBOTICS</option>
-          <option value="EEE">EEE</option>
-          <option value="AUTO">AUTO</option>
-          <option value="BIO">BIO</option>
-        </select>
-        <div class="input-line"></div>
-      </div>
-      <div class="scan-hint" style="margin-bottom:10px;">1 = Present, 0 = Absent</div>
-      <button class="primary" onclick="downloadMonthlyReport()">⬇ Download Report (1/0)</button>
-      <div id="monthlyReportStatus" style="margin-top:10px;"></div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    Smart Attendance &copy; 2026 · Muthupriyan
-    <div class="footer-links">
-      <a href="https://github.com/muthupriyan-dev" target="_blank"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-      <a href="https://www.instagram.com/itz.muthuu" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="mailto:smuthupriyan020108@gmail.com"><i class="fas fa-envelope"></i></a>
-    </div>
-  </footer>
 
   <!-- Firebase + Libraries -->
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -679,7 +760,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ================= ATTENDANCE WINDOW =================
+    // ================= WINDOW =================
     const WINDOW_START_MIN = 7 * 60;
     const WINDOW_END_MIN = 16 * 60 + 30;
     document.getElementById('windowText').textContent = '7:00 AM - 4:30 PM';
@@ -689,7 +770,6 @@
       const mins = now.getHours() * 60 + now.getMinutes();
       return mins >= WINDOW_START_MIN && mins < WINDOW_END_MIN;
     }
-
     function checkWindowLock() {
       const open = isWithinWindow();
       document.getElementById('closedCard').style.display = open ? 'none' : 'block';
@@ -702,17 +782,13 @@
     function updateClock() {
       const now = new Date();
       document.getElementById('clockRow').textContent = now.toLocaleString('en-IN', {
-        weekday: 'short',
-        day: '2-digit',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit'
+        weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
       });
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ================= CONNECTION STATUS =================
+    // ================= STATUS =================
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
     db.ref('.info/connected').on('value', (snap) => {
@@ -725,7 +801,23 @@
       }
     });
 
-    // ================= TEACHER PIN =================
+    // ================= THEME =================
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+    // load saved theme
+    (function() {
+      const saved = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+    })();
+
+    // ================= PIN =================
     const TEACHER_PIN = "2026";
     let teacherUnlocked = false;
 
@@ -744,23 +836,23 @@
       document.getElementById('teacherTabBtn').classList.toggle('active', tab === 'teacher');
     }
 
-    // ================= THEME TOGGLE =================
-    function toggleTheme() {
-      const body = document.body;
-      const icon = document.getElementById('themeToggle');
-      if (icon.textContent === '🌤️') {
-        body.style.background = 'linear-gradient(135deg, #e8d5b7 0%, #d4b8a0 30%, #c9a88c 60%, #b8927a 85%, #a88a7a 100%)';
-        icon.textContent = '☀️';
-      } else {
-        body.style.background = 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 30%, #f5c6a0 60%, #e8a87c 85%, #d4a5a5 100%)';
-        icon.textContent = '🌤️';
-      }
-    }
+    // ================= RIPPLE =================
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn');
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
 
     // ================= STUDENT STATE =================
-    let currentClass = null;
-    let currentSubject = null;
-
+    let currentClass = null, currentSubject = null;
     function showClassBadgesAndForm() {
       document.getElementById('classInfoBox').style.display = 'block';
       document.getElementById('classBadge').textContent = 'Class: ' + currentClass;
@@ -768,45 +860,33 @@
       document.getElementById('preScanArea').style.display = 'none';
       document.getElementById('loginForm').style.display = 'block';
     }
-
     function resetClassSelection() {
-      currentClass = null;
-      currentSubject = null;
+      currentClass = null; currentSubject = null;
       document.getElementById('classInfoBox').style.display = 'none';
       document.getElementById('preScanArea').style.display = 'block';
       document.getElementById('loginForm').style.display = 'none';
     }
 
     // ================= QR SCANNER =================
-    let scanStream = null;
-    let scanLoopId = null;
-
+    let scanStream = null, scanLoopId = null;
     function startScanner() {
       document.getElementById('qrVideoWrap').style.display = 'block';
       const video = document.getElementById('qrVideo');
       navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then((stream) => {
+        .then(stream => {
           scanStream = stream;
           video.srcObject = stream;
           video.setAttribute('playsinline', true);
           video.play();
           requestAnimationFrame(scanTick);
         })
-        .catch(() => {
-          alert('Camera access failed.');
-          document.getElementById('qrVideoWrap').style.display = 'none';
-        });
+        .catch(() => { alert('Camera access failed.'); document.getElementById('qrVideoWrap').style.display = 'none'; });
     }
-
     function stopScanner() {
-      if (scanStream) {
-        scanStream.getTracks().forEach(t => t.stop());
-        scanStream = null;
-      }
+      if (scanStream) { scanStream.getTracks().forEach(t => t.stop()); scanStream = null; }
       if (scanLoopId) cancelAnimationFrame(scanLoopId);
       document.getElementById('qrVideoWrap').style.display = 'none';
     }
-
     function scanTick() {
       const video = document.getElementById('qrVideo');
       const canvas = document.getElementById('qrCanvasHidden');
@@ -827,13 +907,13 @@
               showClassBadgesAndForm();
               return;
             }
-          } catch (e) { /* ignore */ }
+          } catch (e) {}
         }
       }
       scanLoopId = requestAnimationFrame(scanTick);
     }
 
-    // ================= LOGIN FORM =================
+    // ================= LOGIN =================
     const nameInput = document.getElementById('name');
     const rollInput = document.getElementById('rollNumber');
     const form = document.getElementById('loginForm');
@@ -842,9 +922,7 @@
     const loginBtn = document.getElementById('loginBtn');
     const welcomeTag = document.getElementById('welcomeTag');
 
-    rollInput.addEventListener('input', () => {
-      rollInput.value = rollInput.value.toUpperCase();
-    });
+    rollInput.addEventListener('input', () => { rollInput.value = rollInput.value.toUpperCase(); });
 
     window.addEventListener('DOMContentLoaded', () => {
       const savedName = localStorage.getItem('student_name');
@@ -854,12 +932,13 @@
         rollInput.value = savedRoll;
         welcomeTag.textContent = 'Welcome back, ' + savedName.split(' ')[0];
         document.getElementById('histRoll').value = savedRoll;
+        updateQuickStats(savedRoll);
       }
     });
 
     function getTodayKey() {
       const d = new Date();
-      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     }
 
     form.addEventListener('submit', function(e) {
@@ -867,50 +946,42 @@
       const name = nameInput.value.trim();
       const roll = rollInput.value.trim();
       const rollPattern = /^[A-Z0-9]{4,15}$/;
-
-      errorMsg.textContent = '';
-      successMsg.textContent = '';
-
+      errorMsg.textContent = ''; successMsg.textContent = '';
       if (!name) { errorMsg.textContent = 'Name required'; return; }
       if (!rollPattern.test(roll)) { errorMsg.textContent = 'Valid Roll Number (e.g. 23CSE045)'; return; }
       if (!currentClass || !currentSubject) { errorMsg.textContent = 'Select class first'; return; }
 
       loginBtn.disabled = true;
       loginBtn.innerHTML = '<span class="spinner"></span>Saving...';
-
       const todayKey = getTodayKey();
       const attendanceRef = db.ref(`attendance/${todayKey}/${roll}`);
       const byRollRef = db.ref(`attendanceByRoll/${roll}/${todayKey}`);
 
-      attendanceRef.once('value').then((snapshot) => {
+      attendanceRef.once('value').then(snapshot => {
         if (snapshot.exists()) {
           successMsg.textContent = `${name}, already marked today ✅`;
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Mark Attendance';
+          loginBtn.innerHTML = 'Mark Attendance';
           saveToLocalStorage(name, roll);
+          updateQuickStats(roll);
           return;
         }
-        const record = {
-          name: name,
-          roll: roll,
-          class: currentClass,
-          subject: currentSubject,
-          timestamp: new Date().toISOString()
-        };
-        Promise.all([attendanceRef.set(record), byRollRef.set(record)]).then(() => {
+        const record = { name, roll, class: currentClass, subject: currentSubject, timestamp: new Date().toISOString() };
+        Promise.all([ attendanceRef.set(record), byRollRef.set(record) ]).then(() => {
           successMsg.textContent = `Attendance marked, ${name}! ✅`;
           saveToLocalStorage(name, roll);
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Mark Attendance';
+          loginBtn.innerHTML = 'Mark Attendance';
+          updateQuickStats(roll);
         }).catch(() => {
           errorMsg.textContent = 'Error saving. Try again.';
           loginBtn.disabled = false;
-          loginBtn.textContent = 'Mark Attendance';
+          loginBtn.innerHTML = 'Mark Attendance';
         });
       }).catch(() => {
         errorMsg.textContent = 'Connection error.';
         loginBtn.disabled = false;
-        loginBtn.textContent = 'Mark Attendance';
+        loginBtn.innerHTML = 'Mark Attendance';
       });
     });
 
@@ -919,182 +990,192 @@
       localStorage.setItem('student_roll', roll);
     }
 
+    // ================= QUICK STATS =================
+    function updateQuickStats(roll) {
+      if (!roll) return;
+      const today = getTodayKey();
+      db.ref(`attendanceByRoll/${roll}`).once('value').then(snap => {
+        if (!snap.exists()) {
+          document.getElementById('qsToday').textContent = '—';
+          document.getElementById('qsPercent').textContent = '—';
+          document.getElementById('qsStreak').textContent = '—';
+          return;
+        }
+        const data = snap.val();
+        const dates = Object.keys(data).sort();
+        const total = dates.length;
+        const present = total;
+        const percent = total > 0 ? Math.round((present/total)*100) : 0;
+        document.getElementById('qsToday').textContent = data[today] ? '✅' : '—';
+        document.getElementById('qsPercent').textContent = percent + '%';
+        // streak
+        let streak = 0;
+        const sorted = dates.sort().reverse();
+        for (let d of sorted) {
+          if (data[d]) streak++;
+          else break;
+        }
+        document.getElementById('qsStreak').textContent = streak;
+      }).catch(() => {});
+    }
+
     // ================= HISTORY =================
     function loadHistory() {
       const roll = document.getElementById('histRoll').value.trim().toUpperCase();
       const listDiv = document.getElementById('historyList');
-      if (!roll) { listDiv.innerHTML = '<div class="error-msg">Enter roll number</div>'; return; }
+      const statsDiv = document.getElementById('historyStats');
+      if (!roll) { listDiv.innerHTML = '<div class="error-msg">Enter roll number</div>'; statsDiv.style.display='none'; return; }
       listDiv.innerHTML = '<div class="scan-hint">Loading...</div>';
+      statsDiv.style.display = 'none';
 
-      db.ref(`attendanceByRoll/${roll}`).once('value').then((snap) => {
+      db.ref(`attendanceByRoll/${roll}`).once('value').then(snap => {
         if (!snap.exists()) {
           listDiv.innerHTML = '<div class="scan-hint">No records found.</div>';
+          statsDiv.style.display = 'none';
           return;
         }
         const data = snap.val();
         const dates = Object.keys(data).sort().reverse();
         let html = '';
-        dates.forEach((date) => {
+        dates.forEach(date => {
           const entry = data[date];
           html += `<div class="history-item">
-            <div><div class="history-date">${date}</div><div class="history-sub">${entry.subject || ''} (${entry.class || ''})</div></div>
-            <div class="history-sub">${new Date(entry.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
+            <div><div class="history-date">${date}</div><div class="history-sub">${entry.subject||''} (${entry.class||''})</div></div>
+            <div class="history-sub">${new Date(entry.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})}</div>
           </div>`;
         });
         listDiv.innerHTML = html;
+
+        // Stats
+        const allDates = Object.keys(data).sort();
+        const total = allDates.length;
+        const present = total;
+        const absent = 0;
+        const percent = total > 0 ? Math.round((present/total)*100) : 0;
+        let streak = 0;
+        const sorted = allDates.sort().reverse();
+        for (let d of sorted) {
+          if (data[d]) streak++;
+          else break;
+        }
+        const last = allDates.length > 0 ? allDates[allDates.length-1] : '—';
+        document.getElementById('statPercent').textContent = percent + '%';
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statPresent').textContent = present;
+        document.getElementById('statAbsent').textContent = absent;
+        document.getElementById('statStreak').textContent = streak;
+        document.getElementById('statLast').textContent = last;
+        statsDiv.style.display = 'block';
+        updateQuickStats(roll);
       }).catch(() => {
         listDiv.innerHTML = '<div class="error-msg">Error loading</div>';
+        statsDiv.style.display = 'none';
       });
     }
 
-    // ================= TEACHER: GENERATE QR =================
+    // ================= TEACHER QR =================
     function generateTeacherQR() {
       const cls = document.getElementById('teacherClass').value;
       const sub = document.getElementById('teacherSubject').value.trim();
       if (!cls || !sub) { alert('Select class & subject'); return; }
-
-      const payload = JSON.stringify({
-        class: cls,
-        subject: sub,
-        date: getTodayKey()
-      });
-
+      const payload = JSON.stringify({ class: cls, subject: sub, date: getTodayKey() });
       const holder = document.getElementById('qrcodeCanvasHolder');
       holder.innerHTML = '';
-      new QRCode(holder, {
-        text: payload,
-        width: 200,
-        height: 200,
-        colorDark: '#1a1a2e',
-        colorLight: '#ffffff'
-      });
+      new QRCode(holder, { text: payload, width: 200, height: 200, colorDark: '#1a1a2e', colorLight: '#ffffff' });
       document.getElementById('qrValidText').textContent = `${cls} · ${sub} · ${getTodayKey()}`;
     }
 
-    // ================= TEACHER: VIEW ATTENDANCE =================
-    let lastLoadedEntries = [];
-    let lastLoadedDateKey = '';
-
+    // ================= TEACHER VIEW =================
+    let lastLoadedEntries = [], lastLoadedDateKey = '';
     function loadTeacherAttendance() {
       const dateInput = document.getElementById('viewDate').value;
       const classFilter = document.getElementById('viewClass').value;
       const listDiv = document.getElementById('teacherAttendanceList');
       const dateKey = dateInput || getTodayKey();
       lastLoadedDateKey = dateKey;
-
       listDiv.innerHTML = '<div class="scan-hint">Loading...</div>';
-
-      db.ref(`attendance/${dateKey}`).once('value').then((snap) => {
-        if (!snap.exists()) {
-          listDiv.innerHTML = '<div class="scan-hint">No records.</div>';
-          lastLoadedEntries = [];
-          return;
-        }
+      db.ref(`attendance/${dateKey}`).once('value').then(snap => {
+        if (!snap.exists()) { listDiv.innerHTML = '<div class="scan-hint">No records.</div>'; lastLoadedEntries=[]; return; }
         let entries = Object.values(snap.val());
         if (classFilter) entries = entries.filter(e => e.class === classFilter);
-        if (!entries.length) {
-          listDiv.innerHTML = '<div class="scan-hint">No students for this class.</div>';
-          lastLoadedEntries = [];
-          return;
-        }
-        entries.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        if (!entries.length) { listDiv.innerHTML = '<div class="scan-hint">No students for this class.</div>'; lastLoadedEntries=[]; return; }
+        entries.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
         lastLoadedEntries = entries;
-        let html = `<div class="scan-hint" style="margin-bottom:8px;">${entries.length} present</div>`;
-        entries.forEach((e) => {
+        let html = `<div class="scan-hint" style="margin-bottom:6px;">${entries.length} present</div>`;
+        entries.forEach(e => {
           html += `<div class="history-item">
             <div><div class="history-date">${e.name}</div><div class="history-sub">${e.roll} · ${e.class} · ${e.subject}</div></div>
-            <div class="history-sub">${new Date(e.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
+            <div class="history-sub">${new Date(e.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'})}</div>
           </div>`;
         });
         listDiv.innerHTML = html;
-      }).catch(() => {
-        listDiv.innerHTML = '<div class="error-msg">Error</div>';
-      });
+      }).catch(() => { listDiv.innerHTML = '<div class="error-msg">Error</div>'; });
     }
 
     function downloadAttendanceCSV() {
       if (!lastLoadedEntries.length) { alert('Load attendance first.'); return; }
       let csv = 'Name,Roll Number,Class,Subject,Time\n';
-      lastLoadedEntries.forEach((e) => {
-        const time = new Date(e.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      lastLoadedEntries.forEach(e => {
+        const time = new Date(e.timestamp).toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
         csv += `"${e.name}","${e.roll}","${e.class}","${e.subject}","${time}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = `attendance_${lastLoadedDateKey || getTodayKey()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
-    // ================= TEACHER: MONTHLY REPORT =================
+    // ================= MONTHLY REPORT =================
     function downloadMonthlyReport() {
       const monthInput = document.getElementById('reportMonth').value;
       const classFilter = document.getElementById('reportClass').value;
       const statusDiv = document.getElementById('monthlyReportStatus');
-
       if (!monthInput) { alert('Select month'); return; }
-
       const [year, month] = monthInput.split('-').map(Number);
       const daysInMonth = new Date(year, month, 0).getDate();
       statusDiv.innerHTML = '<div class="scan-hint">Generating...</div>';
-
       const dateKeys = [];
-      for (let d = 1; d <= daysInMonth; d++) {
-        dateKeys.push(`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
-      }
-
-      const fetches = dateKeys.map(dateKey =>
-        db.ref(`attendance/${dateKey}`).once('value').then(snap => ({ dateKey, data: snap.exists() ? snap.val() : null }))
-      );
-
-      Promise.all(fetches).then((results) => {
+      for (let d=1; d<=daysInMonth; d++) dateKeys.push(`${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+      const fetches = dateKeys.map(dateKey => db.ref(`attendance/${dateKey}`).once('value').then(snap => ({ dateKey, data: snap.exists() ? snap.val() : null })));
+      Promise.all(fetches).then(results => {
         const studentMap = {};
         results.forEach(({ dateKey, data }) => {
           if (!data) return;
           const dayNum = parseInt(dateKey.split('-')[2], 10);
-          Object.values(data).forEach((entry) => {
+          Object.values(data).forEach(entry => {
             if (classFilter && entry.class !== classFilter) return;
             if (!studentMap[entry.roll]) studentMap[entry.roll] = { name: entry.name, days: {} };
             studentMap[entry.roll].days[dayNum] = true;
           });
         });
-
         const rolls = Object.keys(studentMap).sort();
-        if (!rolls.length) {
-          statusDiv.innerHTML = '<div class="scan-hint">No data for this month.</div>';
-          return;
-        }
-
+        if (!rolls.length) { statusDiv.innerHTML = '<div class="scan-hint">No data for this month.</div>'; return; }
         let header = ['Roll Number', 'Name'];
-        for (let d = 1; d <= daysInMonth; d++) header.push(String(d));
+        for (let d=1; d<=daysInMonth; d++) header.push(String(d));
         let csv = header.join(',') + '\n';
-
-        rolls.forEach((roll) => {
+        rolls.forEach(roll => {
           const s = studentMap[roll];
           let row = [`"${roll}"`, `"${s.name}"`];
-          for (let d = 1; d <= daysInMonth; d++) {
-            row.push(s.days[d] ? '1' : '0');
-          }
+          for (let d=1; d<=daysInMonth; d++) row.push(s.days[d] ? '1' : '0');
           csv += row.join(',') + '\n';
         });
-
         const blob = new Blob([csv], { type: 'text/csv' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `monthly_${monthInput}${classFilter ? '_' + classFilter : ''}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        a.download = `monthly_${monthInput}${classFilter?'_'+classFilter:''}.csv`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
         statusDiv.innerHTML = `<div class="success-msg">Downloaded — ${rolls.length} students</div>`;
-      }).catch(() => {
-        statusDiv.innerHTML = '<div class="error-msg">Error</div>';
-      });
+      }).catch(() => { statusDiv.innerHTML = '<div class="error-msg">Error</div>'; });
     }
 
-    // Set default date
+    // set default date
     document.getElementById('viewDate').value = getTodayKey();
+
+    // Auto-load history if roll is in input
+    document.getElementById('histRoll').addEventListener('change', function() {
+      if (this.value.trim()) loadHistory();
+    });
   </script>
 </body>
 </html>
