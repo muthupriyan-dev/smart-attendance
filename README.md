@@ -44,14 +44,15 @@ A Modern Smart Attendance Management System built with HTML, CSS, JavaScript & F
 
 ## 📸 Screenshots
 
-> Add screenshots here
+### Home
+![Home](assets/screenshots/home.png)
 
-```
-assets/screenshots/home.png
-assets/screenshots/student.png
-assets/screenshots/history.png
-assets/screenshots/teacher.png
-```
+
+### History
+![History](assets/screenshots/history.png)
+
+### Teacher
+![Teacher](assets/screenshots/teacher.png)
 
 ---
 
