@@ -45,7 +45,7 @@ A Modern Smart Attendance Management System built with HTML, CSS, JavaScript & F
 ## 📸 Screenshots
 
 ### Home
-![Home](assets/screenshots/home.png)
+![Home](assets/home.png)
 
 
 ### History
